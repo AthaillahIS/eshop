@@ -1,0 +1,26 @@
+body {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    height: 100vh; /* Full viewport height */
+    background-color: #f0f0f0;
+}
+
+.container {
+    width: 500px; /* Fixed width */
+    height: 700px; /* Fixed height */
+    background-color: #f1c97b;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+#banner {
+    object-fit: cover;
+}
+
+.item {
+    text-align: center;
+    color: black;
+}
