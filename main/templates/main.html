@@ -3,7 +3,7 @@
     <head>
         <meta charset = "UTF-8">
         <meta name ="viewport" content="width=device-width, initial-scale=1.0">
-        <title>e-shop</title>
+        <title>{{ app_name }}</title>
         {% load static %}
         <link rel="stylesheet" href="{% static 'style.css' %}">
     </head>
@@ -21,6 +21,10 @@
         <h2 class = "review"> Review </h2>
             <p> Average Price : Rp.{{ price }} <br>
             Rating : {{ rating }} <br>
-            date : {{ date }}</p>
+            date : {{ date }} <br>
+            <b> Reviewed by</b> <br>
+                Reviewer : {{ author_name }} <br>
+                Class : {{ author_class }}
+            </p>
     </div>
 </body>

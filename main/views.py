@@ -9,6 +9,9 @@ def show_main(request):
         'description' : 'Best Baguette in the WORLD!!',
         'rating' : '5',
         'date' : '11-08-2024',
+        'author_name' : 'Athaillah Sifa Tanudatar',
+        'author_class' : 'PBP E',
+        'app_name' : 'eshop',
     }
 
     return render(request, "main.html", context)
