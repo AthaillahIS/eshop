@@ -33,3 +33,8 @@ Pertanyaan : Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas 
   Model Django disebut sebagai ORM karena django mengimplementasikan teknik Object-Relational Mapping, yang menghubungkan objek Python dengan tabel basis data relasional. Django juga menyediakan API untuk melakukan operasi basis data. Dengan ORM, developer dapat fokus pada logika aplikasi tanpa harus memikirkan detail SQL.
 
 <img width="8359" alt="Cara Kerja Framework Django" src="https://github.com/user-attachments/assets/e9cad905-9c71-48ba-aeb8-8fee61c2c4c6">
+
+
+TUGAS 2
+1. Membuat input form untuk menambahkan objek model pada app sebelumnya.
+  
