@@ -35,6 +35,68 @@ Pertanyaan : Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas 
 <img width="8359" alt="Cara Kerja Framework Django" src="https://github.com/user-attachments/assets/e9cad905-9c71-48ba-aeb8-8fee61c2c4c6">
 
 
-TUGAS 2
+TUGAS 3
 1. Membuat input form untuk menambahkan objek model pada app sebelumnya.
-  
+  Langkah-langkah yang perlu dilakukan untuk membuat input form adlaah
+  - Membuat file forms.py. File ini digunakan untuk membuat metadata dari database yang akan digunakan untuk pembuatan form
+  Kode :
+  model = Entry untuk merujuk model yang diguanakan
+  fields = [ 'item_name', 'price', 'description', 'rating'] untuk merujuk field yang akan dirender
+  - Menambahkan objek form yang akan digunakan kedalam context pada show_main agar dapat dirender ke template
+  - Buat method baru untuk merespond terhadap request POST yang dilakukan saat user client mengisi form dengan menambahkan def add_order_entry(request):
+  - form = OrderEntryForm(request.POST or None) Untuk melihat isi field dari Order EntryForm apakah form sudah terisi saat user melakukan request POST 
+  - form.save()
+    return redirect('main:show_main')
+    Save isi form user jika isi form valid dan redirect ke method show_main untuk merender main.html
+  - tambahkan url path pada main/urls.py untuk routing add_ordder_entry/ ke view function add_order_entry dengan menambahkan path path('add_order_entry/', add_order_entry, name='add_order_entry'),
+  - Buatlah file html untuk menampilakan form. Dalam app ini filenya adalah main.html yang mengekstend base.html (file html yang mengkonfigurasi head html).
+  Diakhir title and fields yang menampilkan table tambahkan button untuk memproses input form yaitu href="{% url 'main:add_order_entry' %}" href ini akan mengalihkan ke file html add_order entry yang akan menampilkan hasil input form user jika valid.
+  - Tambahkan juga csrf_token dalam file add_order_entry.html untuk memastikan session form memiliki kode yang unik.
+
+2. Tambahkan 4 fungsi views baru untuk melihat objek yang sudah ditambahkan dalam format XML, JSON, XML by ID, dan JSON by ID.
+  - fungsi views XML dan JSON digunakan agar client system dapat melihat dan memproses data dalam models dalam format XML dan JSON.
+  XML dan JSON by ID digunakan untuk melihat XML dan JSON dengan ID tertentu
+  - hal yang perlu dilakukan untuk menambahkan views XML dan JSON adalah dengan menambahkan fungsi yang merender XML dan JSON
+  - def show_xml(request): dan def show_json(request): akan menerima request
+  - data = Entry.objects.all() mengambil data dalam models Entry
+  - return HttpResponse(serializers.serialize('xml', data), content_type='aplication/xml') mengubah data menjadi format xml dan memberikan respond terhadap client
+  - return HttpResponse(serializers.serialize('json', data), content_type='aplication/json') mengubah data menjadi format JSON dan memberikan respond terhadap client
+  - Perbedaan dari XML, JSON dan XML by ID, JSON by ID adalah filter pk by id yang dilakukan pada data = Entry.objects.filter(pk=id).
+
+3.  Membuat routing URL untuk masing-masing views yang telah ditambahkan pada poin 2.
+  - routing dilakukan dengan menambahkan path pada main/urls untuk mengakses fungsi show_xml maupun show_json
+  - dilakukan dengan menambahkan path('xml/', show_xml, name='show_xml') kode ini memiliki parameter path(domain untuk diakses user, metho, reference url),
+  - path('xml/str:id/', show_xml_by_id, name='show_xml_by_id'), sedangkan perbedaan show_by_id hanyalah domain yang diakses oleh user.
+
+4. Jelaskan mengapa kita memerlukan data delivery dalam pengimplementasian sebuah platform?
+  Data delivery sangat penting dalam pengimplementasian sebuah platform karena berfungsi untuk memastikan bahwa informasi atau data yang dibutuhkan dapat diakses oleh pengguna atau sistem lain dengan tepat dan sesui format yang dibutuhkan. Berikut adalah beberapa kegunaannya
+  - Memfasilitasi Komunikasi Antara Komponen Platform
+  - Ketersediaan Data Secara Real-Time
+  - Pengoptimalan Performa
+  - Keamanan dan Enkripsi Data
+  - Mendukung Skalabilitas
+  - Integrasi Lintas Sistem
+
+5.  Menurutmu, mana yang lebih baik antara XML dan JSON? Mengapa JSON lebih populer dibandingkan XML?
+  Menurut saya JSON lebih baik dari XML dan lebih sering digunakan dalam pengembangan web saat ini. Hal ini karena JSON memiliki sintaks yang lebih sederhana dan mudah digunakan. JSON juga terintegrasi dengan javascript sehingga memudahkan pengembangan web menggunakan javascript. Selain itu, JSO lebih cepat melakukan pertukanan data. Akan tetapi, XML juga masih digunakan karena terdapat web browser yang masing menggunakan XML.
+
+6. Jelaskan fungsi dari method is_valid() pada form Django dan mengapa kita membutuhkan method tersebut?
+  Dalam Django, method is_valid() digunakan untuk memeriksa apakah data yang dimasukkan ke dalam form valid sesuai dengan aturan validasi yang ditetapkan pada form tersebut, membersihkan data, dan mengidentifikasi kesalahan. Seperti 
+  - Apakah semua field yang wajib diisi telah diisi.
+  - Apakah data yang dimasukkan sesuai dengan tipe data yang diharapkan (misalnya, angka di field yang diharapkan menerima angka).
+  - Apakah data memenuhi batasan atau format tertentu (misalnya, email yang valid, panjang karakter, dsb).
+  - is_valid() juga membersihkan data dengan menghilangkan whitespace berlebih, mengonversi tipe data, dan melakukan normalisasi sesuai dengan aturan form.
+
+7. Mengapa kita membutuhkan csrf_token saat membuat form di Django? Apa yang dapat terjadi jika kita tidak menambahkan csrf_token pada form Django? Bagaimana hal tersebut dapat dimanfaatkan oleh penyerang?
+  csrf_token digunakan agar setiap session memiliki kode session yang unik dan sulit dipalsukan oleh penyerang sehingga terlindungi dari serangan Cross-Site Request Forgery (CSRF). CSRF adalah serangan di mana penyerang mengirimkan permintaan berbahaya dari situs lain atas nama pengguna yang sah, tanpa sepengetahuannya.
+  - Cara Kerja csrf_token
+    - Penyisipan Token: Django menambahkan token ke dalam form menggunakan {% csrf_token %} dalam template. Token ini akan dikirim sebagai bagian dari permintaan (request) saat form disubmit.
+
+    - Validasi Token: Ketika server menerima permintaan (request), Django akan memeriksa apakah token yang dikirimkan oleh form cocok dengan token yang dihasilkan saat halaman pertama kali dimuat. Jika token tersebut cocok, permintaan dianggap sah.
+
+    - Pencegahan Serangan: Dengan menambahkan csrf_token, server dapat memverifikasi bahwa permintaan berasal dari sumber yang tepercaya (aplikasi pengguna yang sah) dan bukan dari penyerang yang mencoba mengirimkan permintaan berbahaya dari sumber eksternal.
+
+  Jika tidak digunakan csrf_token 
+  - Penyerang dapat membuat halaman web yang secara diam-diam mengirimkan permintaan berbahaya ke server target atas nama pengguna yang sah karena tanpa token CSRF, server tidak dapat memverifikasi apakah permintaan berasal dari aplikasi yang sah.
+
+8. Mengakses keempat URL di poin 2 menggunakan Postman, membuat screenshot dari hasil akses URL pada Postman, dan menambahkannya ke dalam 
