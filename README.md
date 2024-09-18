@@ -100,3 +100,12 @@ TUGAS 3
   - Penyerang dapat membuat halaman web yang secara diam-diam mengirimkan permintaan berbahaya ke server target atas nama pengguna yang sah karena tanpa token CSRF, server tidak dapat memverifikasi apakah permintaan berasal dari aplikasi yang sah.
 
 8. Mengakses keempat URL di poin 2 menggunakan Postman, membuat screenshot dari hasil akses URL pada Postman, dan menambahkannya ke dalam 
+  - show_xml
+    ![show_xml](https://github.com/user-attachments/assets/5a68182e-3dec-49a7-924c-463c5896f9ad)
+  - show_xml_by_id
+    ![show_xml_by_id](https://github.com/user-attachments/assets/5bb23fbe-81a8-4c1b-9cad-296613b544ad)
+  - show_json
+    ![show_json](https://github.com/user-attachments/assets/41d64314-1898-4c51-9046-130387f737ab)
+  - show_json_by_id
+    ![show_json_by_id](https://github.com/user-attachments/assets/5308ce19-1f9c-4097-8ec9-8d84d988669c)
+    
