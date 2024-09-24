@@ -110,101 +110,101 @@ TUGAS 3
     ![show_json_by_id](https://github.com/user-attachments/assets/5308ce19-1f9c-4097-8ec9-8d84d988669c)
     
 TUGAS 4
-1. Mengimplementasikan fungsi registrasi, login, dan logout untuk memungkinkan pengguna untuk mengakses aplikasi sebelumnya dengan lancar.
+  1. Mengimplementasikan fungsi registrasi, login, dan logout untuk memungkinkan pengguna untuk mengakses aplikasi sebelumnya dengan lancar.
 
-  1) Cara Kerja Implementasi Login:
-    
-    1. Akses ke Halaman yang Membutuhkan Autentikasi:
-      - Ketika user mencoba mengakses homepage / halaman yang dirender oleh function show_main, decorator @login_required(login_url='/login') akan memeriksa apakah user sudah login.
-      - Jika user belum login, decorator ini akan redirect user ke halaman login (/login).
+    1) Cara Kerja Implementasi Login:
+      
+      1) Akses ke Halaman yang Membutuhkan Autentikasi:
+        - Ketika user mencoba mengakses homepage / halaman yang dirender oleh function show_main, decorator @login_required(login_url='/login') akan memeriksa apakah user sudah login.
+        - Jika user belum login, decorator ini akan redirect user ke halaman login (/login).
 
-    2. URL Pattern untuk Login:
-      - Dalam urls.py, terdapat URL pattern yang memetakan path /login/ ke function login_user:
-        path('login/', login_user, name='login')
-      - Sehingga saat dilakukan redirect menuju halaman login (/login) function login_user juga dijalankan.
+      2) URL Pattern untuk Login:
+        - Dalam urls.py, terdapat URL pattern yang memetakan path /login/ ke function login_user:
+          path('login/', login_user, name='login')
+        - Sehingga saat dilakukan redirect menuju halaman login (/login) function login_user juga dijalankan.
 
-    3. Proses GET Request untuk Halaman Login:
-      - Saat pertama kali halaman /login diakses (GET request), form autentikasi baru akan dibuat dan halaman login akan dirender:
-        else:
-            form = AuthenticationForm(request)
-        context = {'form': form}
-        return render(request, 'login.html', context)
-      - AuthenticationForm() merupakan builtin form django yang diimport dari library django.contrib.auth.forms digunakan untuk menciptakan form login yang memiliki builtin fitur autentikasi. AuthenticationForm(request) akan menampilkan form login kosong kepada user (dirender dalam login.html).
+      3) Proses GET Request untuk Halaman Login:
+        - Saat pertama kali halaman /login diakses (GET request), form autentikasi baru akan dibuat dan halaman login akan dirender:
+          else:
+              form = AuthenticationForm(request)
+          context = {'form': form}
+          return render(request, 'login.html', context)
+        - AuthenticationForm() merupakan builtin form django yang diimport dari library django.contrib.auth.forms digunakan untuk menciptakan form login yang memiliki builtin fitur autentikasi. AuthenticationForm(request) akan menampilkan form login kosong kepada user (dirender dalam login.html).
 
-    4. Proses POST Request untuk Autentikasi:
-      - Ketika user mengisi form login dan menekan tombol submit, Django menerima POST request. Form akan mengambil data autentikasi yang diinput user:
-        if request.method == 'POST':
-          form = AuthenticationForm(data=request.POST)
+      4) Proses POST Request untuk Autentikasi:
+        - Ketika user mengisi form login dan menekan tombol submit, Django menerima POST request. Form akan mengambil data autentikasi yang diinput user:
+          if request.method == 'POST':
+            form = AuthenticationForm(data=request.POST)
 
-    5. Validasi Autentikasi:
-      - AuthenticationForm akan memanggil fungsi authenticate() untuk memvalidasi username dan password yang diinput user.
-      - Jika kredensial valid, user akan berhasil login dan diarahkan ke halaman utama (home page):
-        if form.is_valid():
-          user = form.get_user()
-          login(request, user)
-          response = HttpResponseRedirect(reverse("main:show_main"))
-          response.set_cookie('last_login', str(datetime.datetime.now()))
-          return response
-      - Fungsi login() melakukan proses login dan membuat session untuk user.
-      - HttpResponseRedirect(reverse("main:show_main")) melakukan redirect halaman menuju url path path('', show_main, name='show_main'),
-      - HttpResponseRedirect memungkinkan user untuk menyimpan dan mengirimkan cookie ke server.
-      - response.set_cookie('last_login', str(datetime.datetime.now())) melakukan set cookie tanggal terakhir user login.
-
-  2) Cara kerja implementasi register:
-
-    1. Navigasi ke Halaman Register dari Halaman Login:
-      - Pada halaman login.html, terdapat link yang mengarahkan user ke halaman register dengan URL pattern berikut:
-        "<"a href="{% url 'main:register' %}">Register Now "<"/a>
-      - Jika user mengklik link ini, akan dikirimkan GET request ke URL /register/ yang memanggil function register karena dalam urls.py, URL pattern berikut memetakan path /register/ ke function register:
-        path('register/', register, name='register')
-
-    2. GET Request untuk Halaman Register:
-      - Saat user mengakses halaman /register/ (GET request), form pendaftaran baru akan dibuat menggunakan UserCreationForm dari library django.contrib.auth.forms Django:
-        form = UserCreationForm()
-        ...
-        context = {'form': form}
-        return render(request, 'register.html', context)
-      - UserCreationForm akan di render dalam register.html
-
-    3. Proses POST Request untuk Pendaftaran:
-      - Ketika user mengisi form pendaftaran dan menekan submit, POST request dikirim ke server, dan UserCreationForm akan melakukan validasi proses register:
-        if request.method == 'POST':
-          form = UserCreationForm(request.POST)
+      5) Validasi Autentikasi:
+        - AuthenticationForm akan memanggil fungsi authenticate() untuk memvalidasi username dan password yang diinput user.
+        - Jika kredensial valid, user akan berhasil login dan diarahkan ke halaman utama (home page):
           if form.is_valid():
-              form.save()
-              messages.success(request, 'Your account has been successfully created!')
-              return redirect('main:login')
-      - Jika form valid, maka data dalam form akan disimpan kedalam database oleh form.save() dan diredirect menuju halaman 
-      /login oleh redirect('main:login').
+            user = form.get_user()
+            login(request, user)
+            response = HttpResponseRedirect(reverse("main:show_main"))
+            response.set_cookie('last_login', str(datetime.datetime.now()))
+            return response
+        - Fungsi login() melakukan proses login dan membuat session untuk user.
+        - HttpResponseRedirect(reverse("main:show_main")) melakukan redirect halaman menuju url path path('', show_main, name='show_main'),
+        - HttpResponseRedirect memungkinkan user untuk menyimpan dan mengirimkan cookie ke server.
+        - response.set_cookie('last_login', str(datetime.datetime.now())) melakukan set cookie tanggal terakhir user login.
 
-  3) Cara kerja implementasi logout:
+    2) Cara kerja implementasi register:
 
-    1. Navigasi ke halaman login
-      - "<"a href="{% url 'main:logout' %}">
-            "<"button>Logout"<"/button>
-        "<"/a>
-        Tombol logout dalam main.html yang di map ke url path path('logout/', logout_user, name='logout') dalam urls.py, akan menjalankan function logout_user saat ditekan.
-      - function logout_user dalam views.py akan melakukan proses autentikasi logout
-        def logout_user(request):
-          logout(request)
-          response = HttpResponseRedirect(reverse('main:login'))
-          response.delete_cookie('last_login')
-          return response
-      - logout(request) menerima parameter request.user untuk mengakhiri session
-      - HttpResponseRedirect(reverse('main:login')) akan redirect menuju halaman login dan menjalankan function login_user karena reference login di map ke url path path('login/', login_user, name='login'), dalam urls.py.
-      - HttpResponseRedirect memungkinkan server untuk delete cookies yang tersimpan dalam server menggunakan response.delete_cookie('last_login'), 'last_login' merupakan key cookie yang disimpan saat login_user
+      1) Navigasi ke Halaman Register dari Halaman Login:
+        - Pada halaman login.html, terdapat link yang mengarahkan user ke halaman register dengan URL pattern berikut:
+          "<"a href="{% url 'main:register' %}">Register Now "<"/a>
+        - Jika user mengklik link ini, akan dikirimkan GET request ke URL /register/ yang memanggil function register karena dalam urls.py, URL pattern berikut memetakan path /register/ ke function register:
+          path('register/', register, name='register')
 
-  2) Membuat dua akun pengguna dengan masing-masing tiga dummy data menggunakan model yang telah dibuat pada aplikasi sebelumnya untuk setiap akun di lokal.
+      2) GET Request untuk Halaman Register:
+        - Saat user mengakses halaman /register/ (GET request), form pendaftaran baru akan dibuat menggunakan UserCreationForm dari library django.contrib.auth.forms Django:
+          form = UserCreationForm()
+          ...
+          context = {'form': form}
+          return render(request, 'register.html', context)
+        - UserCreationForm akan di render dalam register.html
 
-    1. Step
+      3) Proses POST Request untuk Pendaftaran:
+        - Ketika user mengisi form pendaftaran dan menekan submit, POST request dikirim ke server, dan UserCreationForm akan melakukan validasi proses register:
+          if request.method == 'POST':
+            form = UserCreationForm(request.POST)
+            if form.is_valid():
+                form.save()
+                messages.success(request, 'Your account has been successfully created!')
+                return redirect('main:login')
+        - Jika form valid, maka data dalam form akan disimpan kedalam database oleh form.save() dan diredirect menuju halaman 
+        /login oleh redirect('main:login').
+
+    3) Cara kerja implementasi logout:
+
+      1) Navigasi ke halaman login
+        - "<"a href="{% url 'main:logout' %}">
+              "<"button>Logout"<"/button>
+          "<"/a>
+          Tombol logout dalam main.html yang di map ke url path path('logout/', logout_user, name='logout') dalam urls.py, akan menjalankan function logout_user saat ditekan.
+        - function logout_user dalam views.py akan melakukan proses autentikasi logout
+          def logout_user(request):
+            logout(request)
+            response = HttpResponseRedirect(reverse('main:login'))
+            response.delete_cookie('last_login')
+            return response
+        - logout(request) menerima parameter request.user untuk mengakhiri session
+        - HttpResponseRedirect(reverse('main:login')) akan redirect menuju halaman login dan menjalankan function login_user karena reference login di map ke url path path('login/', login_user, name='login'), dalam urls.py.
+        - HttpResponseRedirect memungkinkan server untuk delete cookies yang tersimpan dalam server menggunakan response.delete_cookie('last_login'), 'last_login' merupakan key cookie yang disimpan saat login_user
+
+  2. Membuat dua akun pengguna dengan masing-masing tiga dummy data menggunakan model yang telah dibuat pada aplikasi sebelumnya untuk setiap akun di lokal.
+
+    1) Step
       - Jalankan webserver
       - lakukan registrasi 2 akun dummy
       - login ke masing-masing akun
       - isi form order_entry sebanyak 3 kali untuk membuat 3 dummy data pada masing-masing akun. 
 
-  3) Menghubungkan model Product dengan User.
+  3. Menghubungkan model Product dengan User.
 
-    1. Mengassign foreign key untuk user dalam models.py,
+    1) Mengassign foreign key untuk user dalam models.py,
       - Untuk mengambil user yang diciptakan dalam UserCreationForm, perlu di include mode User dengan 
         from django.contrib.auth.models import User
       - Assign model User menjadi foreign key / key akses model Produk lainnya.
@@ -212,7 +212,7 @@ TUGAS 4
         class Entry(models.Model):
           user = models.ForeignKey(User, on_delete=models.CASCADE)
 
-    2. Penyimpanan model Product dengan User
+    2) Penyimpanan model Product dengan User
       - Assign model user terhubung dengan form order_entry (model Produk). form.save(commit=false) menunda penyimpanan model produk dalam database sehingga model Produk bisa di hubungkan dengan model User dengan order_entry.user = request.user.
       - Simpan model Produk dalam database menggunakan order_entry.save() 
       - STEP(tambahkan kode dibawah dalam views.py)
@@ -223,7 +223,7 @@ TUGAS 4
         order_entry.save()
         ...
 
-    3. Akses Model Product yang Diassign dengan User
+    3) Akses Model Product yang Diassign dengan User
       - Entry.objects.filter(user=request.user) melakukan filter foreign key User yang diakses dengan User yang mengirimkan request/logged in
       - model Produk disimpan dalam order_entries agar bisa di render dalam file html.
       - STEP(tambahkan kode dibawah dalam views.py)
@@ -235,7 +235,7 @@ TUGAS 4
           ....
         }
       
-    4. Pastikan sudah terdapat user dalam database dan lakukan migrasi data
+    4) Pastikan sudah terdapat user dalam database dan lakukan migrasi data
 
   4. Menampilkan detail informasi pengguna yang sedang logged in seperti username dan menerapkan cookies seperti last login pada halaman utama aplikasi.
 
