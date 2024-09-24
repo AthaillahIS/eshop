@@ -115,30 +115,40 @@ TUGAS 4
     1) Cara Kerja Implementasi Login:
       
       1) Akses ke Halaman yang Membutuhkan Autentikasi:
-        - Ketika user mencoba mengakses homepage / halaman yang dirender oleh function show_main, decorator @login_required(login_url='/login') akan memeriksa apakah user sudah login.
+        - Ketika user mencoba mengakses homepage / halaman yang dirender oleh function
+         show_main, decorator @login_required(login_url='/login') akan memeriksa apakah user
+         sudah login.
         - Jika user belum login, decorator ini akan redirect user ke halaman login (/login).
 
       2) URL Pattern untuk Login:
         - Dalam urls.py, terdapat URL pattern yang memetakan path /login/ ke function login_user:
           path('login/', login_user, name='login')
-        - Sehingga saat dilakukan redirect menuju halaman login (/login) function login_user juga dijalankan.
+        - Sehingga saat dilakukan redirect menuju halaman login (/login) function login_user
+        juga dijalankan.
 
       3) Proses GET Request untuk Halaman Login:
-        - Saat pertama kali halaman /login diakses (GET request), form autentikasi baru akan dibuat dan halaman login akan dirender:
+        - Saat pertama kali halaman /login diakses (GET request), form autentikasi baru akan 
+        dibuat dan halaman login akan dirender:
           else:
               form = AuthenticationForm(request)
           context = {'form': form}
           return render(request, 'login.html', context)
-        - AuthenticationForm() merupakan builtin form django yang diimport dari library django.contrib.auth.forms digunakan untuk menciptakan form login yang memiliki builtin fitur autentikasi. AuthenticationForm(request) akan menampilkan form login kosong kepada user (dirender dalam login.html).
+        - AuthenticationForm() merupakan builtin form django yang diimport dari library 
+        django.contrib.auth.forms digunakan untuk menciptakan form login yang memiliki 
+        builtin fitur autentikasi. AuthenticationForm(request) akan menampilkan form login 
+        kosong kepada user (dirender dalam login.html).
 
       4) Proses POST Request untuk Autentikasi:
-        - Ketika user mengisi form login dan menekan tombol submit, Django menerima POST request. Form akan mengambil data autentikasi yang diinput user:
+        - Ketika user mengisi form login dan menekan tombol submit, Django menerima POST 
+        request. Form akan mengambil data autentikasi yang diinput user:
           if request.method == 'POST':
             form = AuthenticationForm(data=request.POST)
 
       5) Validasi Autentikasi:
-        - AuthenticationForm akan memanggil fungsi authenticate() untuk memvalidasi username dan password yang diinput user.
-        - Jika kredensial valid, user akan berhasil login dan diarahkan ke halaman utama (home page):
+        - AuthenticationForm akan memanggil fungsi authenticate() untuk memvalidasi username 
+        dan password yang diinput user.
+        - Jika kredensial valid, user akan berhasil login dan diarahkan ke halaman utama 
+        (home page):
           if form.is_valid():
             user = form.get_user()
             login(request, user)
@@ -146,20 +156,26 @@ TUGAS 4
             response.set_cookie('last_login', str(datetime.datetime.now()))
             return response
         - Fungsi login() melakukan proses login dan membuat session untuk user.
-        - HttpResponseRedirect(reverse("main:show_main")) melakukan redirect halaman menuju url path path('', show_main, name='show_main'),
+        - HttpResponseRedirect(reverse("main:show_main")) melakukan redirect halaman menuju 
+        url path path('', show_main, name='show_main'),
         - HttpResponseRedirect memungkinkan user untuk menyimpan dan mengirimkan cookie ke server.
-        - response.set_cookie('last_login', str(datetime.datetime.now())) melakukan set cookie tanggal terakhir user login.
+        - response.set_cookie('last_login', str(datetime.datetime.now())) melakukan set 
+        cookie tanggal terakhir user login.
 
     2) Cara kerja implementasi register:
 
       1) Navigasi ke Halaman Register dari Halaman Login:
-        - Pada halaman login.html, terdapat link yang mengarahkan user ke halaman register dengan URL pattern berikut:
+        - Pada halaman login.html, terdapat link yang mengarahkan user ke halaman register 
+        dengan URL pattern berikut:
           "<"a href="{% url 'main:register' %}">Register Now "<"/a>
-        - Jika user mengklik link ini, akan dikirimkan GET request ke URL /register/ yang memanggil function register karena dalam urls.py, URL pattern berikut memetakan path /register/ ke function register:
+        - Jika user mengklik link ini, akan dikirimkan GET request ke URL /register/ yang 
+        memanggil function register karena dalam urls.py, URL pattern berikut memetakan 
+        path /register/ ke function register:
           path('register/', register, name='register')
 
       2) GET Request untuk Halaman Register:
-        - Saat user mengakses halaman /register/ (GET request), form pendaftaran baru akan dibuat menggunakan UserCreationForm dari library django.contrib.auth.forms Django:
+        - Saat user mengakses halaman /register/ (GET request), form pendaftaran baru akan 
+        dibuat menggunakan UserCreationForm dari library django.contrib.auth.forms Django:
           form = UserCreationForm()
           ...
           context = {'form': form}
@@ -167,15 +183,16 @@ TUGAS 4
         - UserCreationForm akan di render dalam register.html
 
       3) Proses POST Request untuk Pendaftaran:
-        - Ketika user mengisi form pendaftaran dan menekan submit, POST request dikirim ke server, dan UserCreationForm akan melakukan validasi proses register:
+        - Ketika user mengisi form pendaftaran dan menekan submit, POST request dikirim ke 
+        server, dan UserCreationForm akan melakukan validasi proses register:
           if request.method == 'POST':
             form = UserCreationForm(request.POST)
             if form.is_valid():
                 form.save()
                 messages.success(request, 'Your account has been successfully created!')
                 return redirect('main:login')
-        - Jika form valid, maka data dalam form akan disimpan kedalam database oleh form.save() dan diredirect menuju halaman 
-        /login oleh redirect('main:login').
+        - Jika form valid, maka data dalam form akan disimpan kedalam database oleh form.save
+        () dan diredirect menuju halaman /login oleh redirect('main:login').
 
     3) Cara kerja implementasi logout:
 
@@ -183,7 +200,8 @@ TUGAS 4
         - "<"a href="{% url 'main:logout' %}">
               "<"button>Logout"<"/button>
           "<"/a>
-          Tombol logout dalam main.html yang di map ke url path path('logout/', logout_user, name='logout') dalam urls.py, akan menjalankan function logout_user saat ditekan.
+          Tombol logout dalam main.html yang di map ke url path path('logout/', logout_user, 
+          name='logout') dalam urls.py, akan menjalankan function logout_user saat ditekan.
         - function logout_user dalam views.py akan melakukan proses autentikasi logout
           def logout_user(request):
             logout(request)
@@ -191,10 +209,15 @@ TUGAS 4
             response.delete_cookie('last_login')
             return response
         - logout(request) menerima parameter request.user untuk mengakhiri session
-        - HttpResponseRedirect(reverse('main:login')) akan redirect menuju halaman login dan menjalankan function login_user karena reference login di map ke url path path('login/', login_user, name='login'), dalam urls.py.
-        - HttpResponseRedirect memungkinkan server untuk delete cookies yang tersimpan dalam server menggunakan response.delete_cookie('last_login'), 'last_login' merupakan key cookie yang disimpan saat login_user
+        - HttpResponseRedirect(reverse('main:login')) akan redirect menuju halaman login dan 
+        menjalankan function login_user karena reference login di map ke url path path
+        ('login/', login_user, name='login'), dalam urls.py.
+        - HttpResponseRedirect memungkinkan server untuk delete cookies yang tersimpan dalam 
+        server menggunakan response.delete_cookie('last_login'), 'last_login' merupakan key 
+        cookie yang disimpan saat login_user
 
-  2. Membuat dua akun pengguna dengan masing-masing tiga dummy data menggunakan model yang telah dibuat pada aplikasi sebelumnya untuk setiap akun di lokal.
+  2. Membuat dua akun pengguna dengan masing-masing tiga dummy data menggunakan model yang 
+  telah dibuat pada aplikasi sebelumnya untuk setiap akun di lokal.
 
     1) Step
       - Jalankan webserver
@@ -205,15 +228,17 @@ TUGAS 4
   3. Menghubungkan model Product dengan User.
 
     1) Mengassign foreign key untuk user dalam models.py,
-      - Untuk mengambil user yang diciptakan dalam UserCreationForm, perlu di include mode User dengan 
-        from django.contrib.auth.models import User
+      - Untuk mengambil user yang diciptakan dalam UserCreationForm, perlu di include mode 
+      User dengan from django.contrib.auth.models import User
       - Assign model User menjadi foreign key / key akses model Produk lainnya.
       - STEP(tambahkan kode dibawah ini dalam models.py)
         class Entry(models.Model):
           user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     2) Penyimpanan model Product dengan User
-      - Assign model user terhubung dengan form order_entry (model Produk). form.save(commit=false) menunda penyimpanan model produk dalam database sehingga model Produk bisa di hubungkan dengan model User dengan order_entry.user = request.user.
+      - Assign model user terhubung dengan form order_entry (model Produk). form.save
+      (commit=false) menunda penyimpanan model produk dalam database sehingga model Produk 
+      bisa di hubungkan dengan model User dengan order_entry.user = request.user.
       - Simpan model Produk dalam database menggunakan order_entry.save() 
       - STEP(tambahkan kode dibawah dalam views.py)
       def add_order_entry(request):
@@ -224,7 +249,8 @@ TUGAS 4
         ...
 
     3) Akses Model Product yang Diassign dengan User
-      - Entry.objects.filter(user=request.user) melakukan filter foreign key User yang diakses dengan User yang mengirimkan request/logged in
+      - Entry.objects.filter(user=request.user) melakukan filter foreign key User yang 
+      diakses dengan User yang mengirimkan request/logged in
       - model Produk disimpan dalam order_entries agar bisa di render dalam file html.
       - STEP(tambahkan kode dibawah dalam views.py)
       def show_main(request):
@@ -241,12 +267,15 @@ TUGAS 4
 
     1) Penjelasan
     
-      - Cookie dapat disimpan dalam objek response. Dalam kode views.py cookies disimpan dalam response HttpRedirect:
+      - Cookie dapat disimpan dalam objek response. Dalam kode views.py cookies disimpan 
+      dalam response HttpRedirect:
         response = HttpResponseRedirect(reverse("main:show_main"))
         response.set_cookie('last_login', str(datetime.datetime.now()))
       - set_cookies(key, value), menyimpan cookie dengan key value pair. 
-      - Cookies kemudian akan di simpan dalam browser client. Jika user melakukan request ke web, cookies akan otomatis dikirimkan
-      - Untuk menggunakan cookies, cookies perlu ditambahkan dalam aplication context sehingga dapat dirender dalam file html
+      - Cookies kemudian akan di simpan dalam browser client. Jika user melakukan request ke 
+      web, cookies akan otomatis dikirimkan
+      - Untuk menggunakan cookies, cookies perlu ditambahkan dalam aplication context 
+      sehingga dapat dirender dalam file html
         def show_main(request):
           context = {
             ...
@@ -258,89 +287,145 @@ TUGAS 4
   5. Apa perbedaan antara HttpResponseRedirect() dan redirect()
 
     1) HttpResponseRedirect()
-      - Definisi: Ini adalah kelas respons yang mengembalikan status HTTP 302 (Found) yang menandakan bahwa sumber daya yang diminta telah dipindahkan sementara ke URL baru.
-      - Penggunaan: Pemanggilan perlu menyebutkan URL secara eksplisit saat menggunakan HttpResponseRedirect(reverse('main:login')).
-      - Kelebihan : Memberikan kontrol penuh atas pengaturan respons. HttpResponseRedirect() dapat menambahkan header atau cookie jika perlu sebelum mengembalikannya.
+      - Definisi: Ini adalah kelas respons yang mengembalikan status HTTP 302 (Found) yang 
+      menandakan bahwa sumber daya yang diminta telah dipindahkan sementara ke URL baru.
+      - Penggunaan: Pemanggilan perlu menyebutkan URL secara eksplisit saat menggunakan 
+      HttpResponseRedirect(reverse('main:login')).
+      - Kelebihan : Memberikan kontrol penuh atas pengaturan respons. HttpResponseRedirect() 
+      dapat menambahkan header atau cookie jika perlu sebelum mengembalikannya.
 
     2) redirect()
-      - Definisi: redirect() adalah fungsi yang memudahkan pembuatan objek HttpResponseRedirect().
-      - Penggunaan: redirect() dapat menerima URL, nama view, atau objek HttpResponseRedirect, sehingga lebih fleksibel dan mudah digunakan.
+      - Definisi: redirect() adalah fungsi yang memudahkan pembuatan objek 
+      HttpResponseRedirect().
+      - Penggunaan: redirect() dapat menerima URL, nama view, atau objek 
+      HttpResponseRedirect, sehingga lebih fleksibel dan mudah digunakan.
         redirect('main:show_main')
       - kelebihan: 
-        - Simplicity: Mengurangi kode yang perlu ditulis. redirect() tidak perlu menggunakan reverse() secara eksplisit jika menggunakan nama view. 
-        - Support for arguments: redirect() juga memungkinkan untuk menyertakan argumen untuk URL dengan cara yang lebih bersih.
+        - Simplicity: Mengurangi kode yang perlu ditulis. redirect() tidak perlu menggunakan 
+        reverse() secara eksplisit jika menggunakan nama view. 
+        - Support for arguments: redirect() juga memungkinkan untuk menyertakan argumen 
+        untuk URL dengan cara yang lebih bersih.
 
   6. Jelaskan cara kerja penghubungan model Product dengan User! (tambahan dari NO.3)
 
-    1) Definisi Model (menghubungkan model User dengan model Produk): user = models.ForeignKey(User, on_delete=models.CASCADE)
-      - ForeignKey (user): Ini mendefinisikan hubungan antara Product dan User. Artinya, setiap produk terhubung dengan satu pengguna (User).
-      - on_delete=models.CASCADE: Jika pengguna yang terkait dengan produk dihapus, semua produk yang terhubung dengan pengguna tersebut juga akan dihapus.
+    1) Definisi Model (menghubungkan model User dengan model Produk): user = models.
+    ForeignKey(User, on_delete=models.CASCADE)
+      - ForeignKey (user): Ini mendefinisikan hubungan antara Product dan User. Artinya, 
+      setiap produk terhubung dengan satu pengguna (User).
+      - on_delete=models.CASCADE: Jika pengguna yang terkait dengan produk dihapus, semua 
+      produk yang terhubung dengan pengguna tersebut juga akan dihapus.
 
     2) Menyimpan Produk dengan Pengguna
-      - form.save(commit=False): Ini menunda penyimpanan ke database, sehingga kita bisa menambahkan informasi pengguna (request.user) sebelum menyimpan produk.
-      - product.user = request.user: Produk tersebut kemudian dihubungkan dengan pengguna yang sedang login.
+      - form.save(commit=False): Ini menunda penyimpanan ke database, sehingga kita bisa 
+      menambahkan informasi pengguna (request.user) sebelum menyimpan produk.
+      - product.user = request.user: Produk tersebut kemudian dihubungkan dengan pengguna 
+      yang sedang login.
     
     3) Mengakses Produk berdasarkan Pengguna
-      - Product.objects.filter(user=request.user): Ini mengambil semua produk yang dimiliki oleh pengguna yang sedang login (request.user). Dengan ini, pengguna hanya bisa melihat dan mengakses produk mereka sendiri.
+      - Product.objects.filter(user=request.user): Ini mengambil semua produk yang dimiliki 
+      oleh pengguna yang sedang login (request.user). Dengan ini, pengguna hanya bisa 
+      melihat dan mengakses produk mereka sendiri.
 
 
   7. Apa perbedaan antara authentication dan authorization, apakah yang dilakukan saat pengguna login? Jelaskan bagaimana Django mengimplementasikan kedua konsep tersebut.
 
     1) Perbedaan antara Authentication dan Authorization
       1. Authentication (Autentikasi):
-        - Proses untuk memverifikasi identitas pengguna. Pada tahap ini, sistem mengecek apakah pengguna yang mencoba masuk ke sistem sesuai dengan data dalam database.
-        - Contoh: Ketika pengguna memasukkan username dan password untuk login, sistem memeriksa apakah kombinasi tersebut cocok dengan data yang ada dalam database.
+        - Proses untuk memverifikasi identitas pengguna. Pada tahap ini, sistem mengecek 
+        apakah pengguna yang mencoba masuk ke sistem sesuai dengan data dalam database.
+        - Contoh: Ketika pengguna memasukkan username dan password untuk login, sistem 
+        memeriksa apakah kombinasi tersebut cocok dengan data yang ada dalam database.
       2. Authorization (Otorisasi):
-        - Proses untuk menentukan hak akses pengguna setelah mereka berhasil diautentikasi. Ini menentukan apa yang boleh dan tidak boleh dilakukan oleh pengguna dalam aplikasi.
-        - Contoh: Setelah login, pengguna mungkin hanya memiliki akses ke halaman tertentu, dan hak akses ini bisa berbeda berdasarkan peran pengguna (misalnya, admin, pengguna biasa).
+        - Proses untuk menentukan hak akses pengguna setelah mereka berhasil diautentikasi. 
+        Ini menentukan apa yang boleh dan tidak boleh dilakukan oleh pengguna dalam aplikasi.
+        - Contoh: Setelah login, pengguna mungkin hanya memiliki akses ke halaman tertentu, 
+        dan hak akses ini bisa berbeda berdasarkan peran pengguna (misalnya, admin, pengguna 
+        biasa).
 
     2) Proses Login Pengguna
-      - Saat pengguna melakukan login, mereka memasukkan username dan password. Ini adalah tahap authentication, di mana sistem memverifikasi kredensial tersebut. Jika autentikasi berhasil, pengguna dianggap telah terautentikasi.
-      - Setelah autentikasi, sistem kemudian dapat melakukan authorization untuk menentukan halaman atau data apa yang bisa diakses oleh pengguna tersebut.
+      - Saat pengguna melakukan login, mereka memasukkan username dan password. Ini adalah 
+      tahap authentication, di mana sistem memverifikasi kredensial tersebut. Jika 
+      autentikasi berhasil, pengguna dianggap telah terautentikasi.
+      - Setelah autentikasi, sistem kemudian dapat melakukan authorization untuk menentukan 
+      halaman atau data apa yang bisa diakses oleh pengguna tersebut.
 
       (IMPLEMENTASI dalam kode)
-      - Dalam implementasi kode ini akses otorisasi diberikan pada user yang telah melakukan login, user pertama dialihkan untuk login agar diautentikasi
+      - Dalam implementasi kode ini akses otorisasi diberikan pada user yang telah melakukan 
+      login, user pertama dialihkan untuk login agar diautentikasi
         @login_required(login_url='/login'), me
-      - Setelah autentikasi, user memiliki otorisasi untuk mengirimkan request dan mengakses show_main(request)
+      - Setelah autentikasi, user memiliki otorisasi untuk mengirimkan request dan mengakses 
+      show_main(request)
 
     3) Implementasi Authentication dan Authorization di Django
       - Authentication
-        Model User: saat user registrasi menggunakan UserCreationForm django akan menciptakan model User dari library django.contrib.auth.forms
-        - Form Autentikasi (AuthenticationForm): saat pengguna login dengan mengisi form AuthenticationForm, django akan mengecek apakah objek User ada dalam database dengan menjalankan fungsi authenticate()
-        - Fungsi Autentikasi: Fungsi authenticate() digunakan untuk memverifikasi kredensial pengguna. Jika kombinasi username dan password valid, fungsi ini akan mengembalikan objek pengguna.
+        Model User: saat user registrasi menggunakan UserCreationForm django akan 
+        menciptakan model User dari library django.contrib.auth.forms
+        - Form Autentikasi (AuthenticationForm): saat pengguna login dengan mengisi form 
+        AuthenticationForm, django akan mengecek apakah objek User ada dalam database dengan 
+        menjalankan fungsi authenticate()
+        - Fungsi Autentikasi: Fungsi authenticate() digunakan untuk memverifikasi kredensial 
+        pengguna. Jika kombinasi username dan password valid, fungsi ini akan mengembalikan 
+        objek pengguna.
       
       - Authorization
-        - Group dan Permission: Django memungkinkan untuk mengatur grup dan permission untuk pengguna. Ini memungkinkan developer untuk menentukan apa yang dapat dan tidak dapat dilakukan oleh pengguna tertentu.
-        - Decorator: pembatasan otorisasi dapat dilakukan menggunakan decorator seperti @login_required untuk membatasi akses ke view tertentu hanya untuk pengguna yang terautentikasi.
+        - Group dan Permission: Django memungkinkan untuk mengatur grup dan permission untuk 
+        pengguna. Ini memungkinkan developer untuk menentukan apa yang dapat dan tidak dapat 
+        dilakukan oleh pengguna tertentu.
+        - Decorator: pembatasan otorisasi dapat dilakukan menggunakan decorator seperti 
+        @login_required untuk membatasi akses ke view tertentu hanya untuk pengguna yang 
+        terautentikasi.
 
   8. Bagaimana Django mengingat pengguna yang telah login? Jelaskan kegunaan lain dari cookies dan apakah semua cookies aman digunakan?
 
     1) Cara Django Mengingat Pengguna yang Telah Login
-      - Sesi (Session): Ketika pengguna berhasil login melalui fungsi login(), Django membuat sesi untuk pengguna tersebut. Django menggunakan database atau cache untuk menyimpan sesi ini. Setiap sesi diidentifikasi dengan ID sesi yang unik.
+      - Sesi (Session): Ketika pengguna berhasil login melalui fungsi login(), Django 
+      membuat sesi untuk pengguna tersebut. Django menggunakan database atau cache untuk 
+      menyimpan sesi ini. Setiap sesi diidentifikasi dengan ID sesi yang unik.
 
-      - Cookies: Django menyimpan ID sesi di cookie pada browser pengguna. Cookie ini adalah string yang dikirimkan oleh server ke browser dan disimpan di sisi klien. Setiap kali pengguna mengunjungi situs web, cookie ini dikirim kembali ke server, memungkinkan Django untuk mengaitkan permintaan pengguna dengan sesi mereka.
+      - Cookies: Django menyimpan ID sesi di cookie pada browser pengguna. Cookie ini adalah 
+      string yang dikirimkan oleh server ke browser dan disimpan di sisi klien. Setiap kali 
+      pengguna mengunjungi situs web, cookie ini dikirim kembali ke server, memungkinkan 
+      Django untuk mengaitkan permintaan pengguna dengan sesi mereka.
 
     2) Proses Login dan Pengingatan Pengguna
-      - Login: Ketika pengguna login, Django memanggil fungsi login(request, user), yang mengatur sesi dan menyimpan ID sesi dalam cookie.
+      - Login: Ketika pengguna login, Django memanggil fungsi login(request, user), yang 
+      mengatur sesi dan menyimpan ID sesi dalam cookie.
 
-      - Penyimpanan Cookie: Secara default, cookie sesi akan memiliki masa berlaku hingga browser ditutup.
+      - Penyimpanan Cookie: Secara default, cookie sesi akan memiliki masa berlaku hingga 
+      browser ditutup.
 
-      - Pengecekan Sesi: Pada setiap permintaan yang dilakukan oleh pengguna, Django memeriksa cookie untuk ID sesi. Jika ID sesi valid dan ada dalam penyimpanan sesi (database atau cache), Django menganggap pengguna tersebut terautentikasi dan dapat mengakses sumber daya yang dilindungi.
+      - Pengecekan Sesi: Pada setiap permintaan yang dilakukan oleh pengguna, Django 
+      memeriksa cookie untuk ID sesi. Jika ID sesi valid dan ada dalam penyimpanan sesi 
+      (database atau cache), Django menganggap pengguna tersebut terautentikasi dan dapat 
+      mengakses sumber daya yang dilindungi.
 
     3) Kegunaan Lain dari Cookies
-      - Pengaturan Preferensi Pengguna: Cookies dapat digunakan untuk menyimpan preferensi pengguna seperti bahasa yang dipilih, tema, dan pengaturan tampilan lainnya.
+      - Pengaturan Preferensi Pengguna: Cookies dapat digunakan untuk menyimpan preferensi 
+      pengguna seperti bahasa yang dipilih, tema, dan pengaturan tampilan lainnya.
 
-      - Pelacakan Analitik: Cookies sering digunakan untuk mengumpulkan data analitik tentang bagaimana pengguna berinteraksi dengan situs web, membantu pemilik situs web memahami perilaku pengguna dan meningkatkan pengalaman pengguna.
+      - Pelacakan Analitik: Cookies sering digunakan untuk mengumpulkan data analitik 
+      tentang bagaimana pengguna berinteraksi dengan situs web, membantu pemilik situs web 
+      memahami perilaku pengguna dan meningkatkan pengalaman pengguna.
 
-      - Otentikasi: Selain menyimpan ID sesi, cookies dapat menyimpan token otentikasi untuk pengguna yang telah login untuk keperluan autentikasi yang lebih lanjut (misalnya, untuk API).
+      - Otentikasi: Selain menyimpan ID sesi, cookies dapat menyimpan token otentikasi untuk 
+      pengguna yang telah login untuk keperluan autentikasi yang lebih lanjut (misalnya, 
+      untuk API).
 
     4) Apakah Semua Cookies Aman Digunakan?
       Tidak semua cookies aman, dan ada beberapa faktor yang perlu dipertimbangkan:
 
-      - Cookie HTTP dan Secure: Cookie yang tidak memiliki flag Secure dapat dikirim melalui koneksi yang tidak aman (HTTP). Ini dapat membuat cookie rentan terhadap serangan Man-in-the-Middle. Harus digunakan flag Secure untuk cookies yang sensitif agar hanya dikirim melalui HTTPS.
+      - Cookie HTTP dan Secure: Cookie yang tidak memiliki flag Secure dapat dikirim melalui 
+      koneksi yang tidak aman (HTTP). Ini dapat membuat cookie rentan terhadap serangan 
+      Man-in-the-Middle. Harus digunakan flag Secure untuk cookies yang sensitif agar hanya 
+      dikirim melalui HTTPS.
 
-      - HttpOnly: Mengatur flag HttpOnly pada cookie mencegah akses cookie oleh JavaScript, yang membantu melindungi dari serangan Cross-Site Scripting (XSS).
+      - HttpOnly: Mengatur flag HttpOnly pada cookie mencegah akses cookie oleh JavaScript, 
+      yang membantu melindungi dari serangan Cross-Site Scripting (XSS).
       
-      - SameSite: Pengaturan cookie SameSite membantu mencegah serangan Cross-Site Request Forgery (CSRF) dengan membatasi pengiriman cookie hanya pada permintaan yang berasal dari situs yang sama.
+      - SameSite: Pengaturan cookie SameSite membantu mencegah serangan Cross-Site Request 
+      Forgery (CSRF) dengan membatasi pengiriman cookie hanya pada permintaan yang berasal 
+      dari situs yang sama.
       
-      - Enkripsi: Data sensitif tidak boleh disimpan dalam cookie tanpa enkripsi. Jika informasi penting disimpan dalam cookie, penting untuk mengenkripsi data tersebut agar tidak dapat dibaca jika cookie dicuri.
+      - Enkripsi: Data sensitif tidak boleh disimpan dalam cookie tanpa enkripsi. Jika 
+      informasi penting disimpan dalam cookie, penting untuk mengenkripsi data tersebut agar 
+      tidak dapat dibaca jika cookie dicuri.
