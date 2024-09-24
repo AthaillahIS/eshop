@@ -9,6 +9,7 @@
         Class: {{ class }} <br>
         NPM: {{ npm }}
     </p>
+    <h5>Sesi terakhir login: {{ last_login }}</h5>
 </div>
 
 {% if not order_entries %}
@@ -40,5 +41,8 @@
 
 <a href="{% url 'main:add_order_entry' %}">
     <button>Add New Order Entry</button>
+</a>
+<a href="{% url 'main:logout' %}">
+    <button>Logout</button>
 </a>
 {% endblock %}
