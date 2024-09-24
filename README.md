@@ -179,7 +179,7 @@ TUGAS 4
 
   3) Cara kerja implementasi logout:
 
-    a. Navigasi ke halaman login
+    1. Navigasi ke halaman login
       - "<"a href="{% url 'main:logout' %}">
             "<"button>Logout"<"/button>
         "<"/a>
@@ -194,15 +194,17 @@ TUGAS 4
       - HttpResponseRedirect(reverse('main:login')) akan redirect menuju halaman login dan menjalankan function login_user karena reference login di map ke url path path('login/', login_user, name='login'), dalam urls.py.
       - HttpResponseRedirect memungkinkan server untuk delete cookies yang tersimpan dalam server menggunakan response.delete_cookie('last_login'), 'last_login' merupakan key cookie yang disimpan saat login_user
 
-  2. Membuat dua akun pengguna dengan masing-masing tiga dummy data menggunakan model yang telah dibuat pada aplikasi sebelumnya untuk setiap akun di lokal.
-    - Jalankan webserver
-    - lakukan registrasi 2 akun dummy
-    - login ke masing-masing akun
-    - isi form order_entry sebanyak 3 kali untuk membuat 3 dummy data pada masing-masing akun. 
+  2) Membuat dua akun pengguna dengan masing-masing tiga dummy data menggunakan model yang telah dibuat pada aplikasi sebelumnya untuk setiap akun di lokal.
 
-  3. Menghubungkan model Product dengan User.
+    1. Step
+      - Jalankan webserver
+      - lakukan registrasi 2 akun dummy
+      - login ke masing-masing akun
+      - isi form order_entry sebanyak 3 kali untuk membuat 3 dummy data pada masing-masing akun. 
 
-    1) Mengassign foreign key untuk user dalam models.py,
+  3) Menghubungkan model Product dengan User.
+
+    1. Mengassign foreign key untuk user dalam models.py,
       - Untuk mengambil user yang diciptakan dalam UserCreationForm, perlu di include mode User dengan 
         from django.contrib.auth.models import User
       - Assign model User menjadi foreign key / key akses model Produk lainnya.
@@ -210,7 +212,7 @@ TUGAS 4
         class Entry(models.Model):
           user = models.ForeignKey(User, on_delete=models.CASCADE)
 
-    2) Penyimpanan model Product dengan User
+    2. Penyimpanan model Product dengan User
       - Assign model user terhubung dengan form order_entry (model Produk). form.save(commit=false) menunda penyimpanan model produk dalam database sehingga model Produk bisa di hubungkan dengan model User dengan order_entry.user = request.user.
       - Simpan model Produk dalam database menggunakan order_entry.save() 
       - STEP(tambahkan kode dibawah dalam views.py)
@@ -221,7 +223,7 @@ TUGAS 4
         order_entry.save()
         ...
 
-    3) Akses Model Product yang Diassign dengan User
+    3. Akses Model Product yang Diassign dengan User
       - Entry.objects.filter(user=request.user) melakukan filter foreign key User yang diakses dengan User yang mengirimkan request/logged in
       - model Produk disimpan dalam order_entries agar bisa di render dalam file html.
       - STEP(tambahkan kode dibawah dalam views.py)
@@ -233,22 +235,25 @@ TUGAS 4
           ....
         }
       
-    4) Pastikan sudah terdapat user dalam database dan lakukan migrasi data
+    4. Pastikan sudah terdapat user dalam database dan lakukan migrasi data
 
   4. Menampilkan detail informasi pengguna yang sedang logged in seperti username dan menerapkan cookies seperti last login pada halaman utama aplikasi.
-    - Cookie dapat disimpan dalam objek response. Dalam kode views.py cookies disimpan dalam response HttpRedirect:
-      response = HttpResponseRedirect(reverse("main:show_main"))
-      response.set_cookie('last_login', str(datetime.datetime.now()))
-    - set_cookies(key, value), menyimpan cookie dengan key value pair. 
-    - Cookies kemudian akan di simpan dalam browser client. Jika user melakukan request ke web, cookies akan otomatis dikirimkan
-    - Untuk menggunakan cookies, cookies perlu ditambahkan dalam aplication context sehingga dapat dirender dalam file html
-      def show_main(request):
-        context = {
-          ...
-          'last_login': request.COOKIES['last_login'],
-          ...
-        }
-    - request.COOKIES['last_login'] mengakses cookies dengan key 'last_login'
+
+    1) Penjelasan
+    
+      - Cookie dapat disimpan dalam objek response. Dalam kode views.py cookies disimpan dalam response HttpRedirect:
+        response = HttpResponseRedirect(reverse("main:show_main"))
+        response.set_cookie('last_login', str(datetime.datetime.now()))
+      - set_cookies(key, value), menyimpan cookie dengan key value pair. 
+      - Cookies kemudian akan di simpan dalam browser client. Jika user melakukan request ke web, cookies akan otomatis dikirimkan
+      - Untuk menggunakan cookies, cookies perlu ditambahkan dalam aplication context sehingga dapat dirender dalam file html
+        def show_main(request):
+          context = {
+            ...
+            'last_login': request.COOKIES['last_login'],
+            ...
+          }
+      - request.COOKIES['last_login'] mengakses cookies dengan key 'last_login'
 
   5. Apa perbedaan antara HttpResponseRedirect() dan redirect()
 
