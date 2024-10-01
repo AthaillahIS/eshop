@@ -5,28 +5,68 @@
 {% endblock meta %}
 
 {% block content %}
+<div class="min-h-screen bg-gray-100 text-gray-900 py-6 flex flex-col justify-center items-center">
+  <div class="relative py-3 sm:w-96 mx-auto text-center">
+      <h2 class="text-2xl font-gray-900 text-extrabold">Create your account</h2>
+  </div>
+    <form class="mt-8 space-y-6 w-full max-w-xs" method="POST">
+      {% csrf_token %}
+      <input type="hidden" name="remember" value="true">
+      <div class="mt-4 bg-white shadow-md rounded-lg">
+        <div class="h-2 bg-gray-900 rounded-t-md"></div>
+        <div class="px-8 py-6">  <!-- Added padding for space inside the container -->
+          {% for field in form %}
+            <div>  <!-- Space between each field -->
+              <label for="{{ field.id_for_label }}" class="mb-2 font-semibold text-black">
+                {{ field.label }}
+              </label>
+              <div class="relative">
+                <div class="border border-gray-300 rounded-md">  <!-- Added light border -->
+                  {{ field }}  <!-- Using add_class -->
+                </div>
+                <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                  {% if field.errors %}
+                    <svg class="h-5 w-5 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                    </svg>
+                  {% endif %}
+                </div>
+              </div>
+              {% if field.errors %}
+                {% for error in field.errors %}
+                  <p class="mt-1 text-sm text-red-600">{{ error }}</p>
+                {% endfor %}
+              {% endif %}
+            </div>
+          {% endfor %}
+        </div>
+      </div>
 
-<div class="login">
-  <h1>Register</h1>
+      <div>
+        <button type="submit" class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-gray-900 hover:bg-gray-700 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-gray-500">
+          Register
+        </button>
+      </div>
+    </form>
 
-  <form method="POST">
-    {% csrf_token %}
-    <table>
-      {{ form.as_table }}
-      <tr>
-        <td></td>
-        <td><input type="submit" name="submit" value="Daftar" /></td>
-      </tr>
-    </table>
-  </form>
+    {% if messages %}
+    <div class="mt-4">
+      {% for message in messages %}
+      <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+        <span class="block sm:inline">{{ message }}</span>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
 
-  {% if messages %}
-  <ul>
-    {% for message in messages %}
-    <li>{{ message }}</li>
-    {% endfor %}
-  </ul>
-  {% endif %}
+    <div class="text-center mt-4">
+      <p class="text-sm text-black">
+        Already have an account?
+        <a href="{% url 'main:login' %}" class="font-medium text-indigo-600 hover:text-indigo-400">
+          Login here
+        </a>
+      </p>
+    </div>
+  </div>
 </div>
-
 {% endblock content %}

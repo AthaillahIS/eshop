@@ -1,48 +1,47 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block meta %}
+<title>e-Shop</title>
+{% endblock meta %}
 
 {% block content %}
-<div class="container">
-    <h1>e-Shop</h1>
-    <p>
-        <b>Created by</b> <br>
-        Name: {{ name }} <br>
-        Class: {{ class }} <br>
-        NPM: {{ npm }}
-    </p>
-    <h5>Sesi terakhir login: {{ last_login }}</h5>
-</div>
+{% include 'navbar.html' %}
+<div class="overflow-x-hidden px-4 md:px-8 pb-8 pt-24 min-h-screen bg-gray-100 flex flex-col">
+    <div class="flex flex-row mb-6 p-4 rounded-lg bg-white shadow-md">
+        <div class="flex-grow">
+            {% include "card_info.html" with title='NPM' value=npm %}
+        </div>
+        <div class="flex-grow">
+            {% include "card_info.html" with title='Name' value=name %}
+        </div>
+        <div class="flex-grow">
+            {% include "card_info.html" with title='Class' value=class %}
+        </div>
+    </div>
 
-{% if not order_entries %}
-    <p>Belum ada data pada eshop.</p>
-{% else %}
-    <table>
-        <tr>
-            <th>Item Name</th>
-            <th>Time</th>
-            <th>Price</th>
-            <th>Description</th>
-            <th>Rating</th>
-        </tr>
+    <div class="flex justify-between mb-6">
+        <div class="flex">
+            <h5 class="bg-gray-900 text-white font-bold py-2 px-4 rounded-lg">Last Login: {{ last_login }}</h5>
+        </div>
+        <div>
+            <a href="{% url 'main:add_order_entry' %}" class="bg-gray-900 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-lg">
+                Add New Order Entry
+            </a>
+        </div>
+    </div>
 
-        {% comment %} Berikut cara memperlihatkan data mood di bawah baris ini {% endcomment %}
+    {% if not order_entries %}
+    <div class="flex flex-col items-center justify-center min-h-[24rem] p-6">
+        <img src="{% static 'image/sad-icon.png' %}" alt="Sad face" class="w-32 h-32 mb-4"/>
+        <p class="text-center text-gray-600 mt-4">No order data available in the e-shop.</p>
+    </div>
+    {% else %}
+    <div class="columns-1 sm:columns-2 lg:columns-3 w-full">
         {% for order_entry in order_entries %}
-        <tr>
-            <td>{{ order_entry.item_name }}</td>
-            <td>{{ order_entry.date }}</td>
-            <td>{{ order_entry.price }}</td>
-            <td>{{ order_entry.description }}</td>
-            <td>{{ order_entry.rating }}</td>
-        </tr>
+            {% include 'order_card.html' with order_entry=order_entry %}
         {% endfor %}
-    </table>
-{% endif %}
-
-<br />
-
-<a href="{% url 'main:add_order_entry' %}">
-    <button>Add New Order Entry</button>
-</a>
-<a href="{% url 'main:logout' %}">
-    <button>Logout</button>
-</a>
+    </div>
+    {% endif %}
+</div>
 {% endblock %}

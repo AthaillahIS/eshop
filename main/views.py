@@ -53,6 +53,23 @@ def add_order_entry(request):
     context = { 'form' : form }
     return render(request, 'add_order_entry.html', context)
 
+def edit_order(request, id):
+    order = Entry.objects.get(pk = id)
+
+    form = OrderEntryForm(request.POST or None, instance=order)
+
+    if form.is_valid() and request.method == "POST":
+        form.save()
+        return HttpResponseRedirect(reverse('main:show_main'))
+
+    context = {'form': form}
+    return render(request, "edit_order.html", context)
+
+def delete_order(request, id):
+    order = Entry.objects.get(pk = id)
+    order.delete()
+    return HttpResponseRedirect(reverse('main:show_main'))
+
 def register(request):
     form = UserCreationForm()
 
