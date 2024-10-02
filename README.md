@@ -885,7 +885,7 @@ TUGAS 5
 
   3. Kustomisasi halaman daftar product menjadi lebih menarik dan responsive. Kemudian, perhatikan kondisi 
   berikut:
-  
+
     1) Jika pada aplikasi belum ada product yang tersimpan, halaman daftar product akan menampilkan gambar dan pesan bahwa belum ada product yang terdaftar.
       - Pesan Ketika Tidak Ada Data Order:
       {% if not order_entries %}
@@ -1210,8 +1210,7 @@ TUGAS 5
       Mengambil elemen tombol hamburger dan menu mobile.
       Menambahkan event listener pada tombol untuk mengubah kelas menu ketika tombol diklik, menampilkan atau menyembunyikan menu mobile.
 
-  6. Jika terdapat beberapa CSS selector untuk suatu elemen HTML, jelaskan urutan prioritas pengambilan CSS selector tersebut!
-    Berikut adalah urutan prioritas spesifisitas selector CSS dari yang terendah ke yang tertinggi:
+  6. Jika terdapat beberapa CSS selector untuk suatu elemen HTML, jelaskan urutan prioritas pengambilan CSS selector tersebut! Berikut adalah urutan prioritas spesifisitas selector CSS dari yang terendah ke yang tertinggi:
 
     1) Universal Selector (*): Selector ini memiliki spesifisitas terendah dan akan diterapkan pada semua elemen jika tidak ada aturan lain yang lebih spesifik.
 
@@ -1229,22 +1228,25 @@ TUGAS 5
 
     8) !important Rule: Aturan ini dapat diterapkan pada properti CSS untuk meningkatkan prioritasnya, terlepas dari spesifisitas lainnya. Contoh: color: red !important;.
   
-  2. Responsive design adalah konsep penting dalam pengembangan aplikasi web karena beberapa alasan berikut:
-    1) Pengalaman Pengguna yang Lebih Baik
-    Dengan responsive design, aplikasi web dapat menyesuaikan tampilan dan 
-    fungsionalitasnya berdasarkan ukuran layar perangkat pengguna (desktop, 
-    tablet, smartphone). Ini meningkatkan kenyamanan dan kepuasan pengguna.
-    2) Meningkatkan Aksesibilitas
-    Aplikasi yang responsif memungkinkan pengguna dengan berbagai jenis 
-    perangkat untuk mengakses konten dengan cara yang mudah. Hal ini penting 
-    karena pengguna menggunakan berbagai perangkat dengan ukuran layar yang 
-    berbeda.
-    3) Efisiensi Pengembangan
-    Mengembangkan satu versi aplikasi yang responsif lebih efisien 
-    dibandingkan dengan membuat versi terpisah untuk berbagai perangkat. Ini 
-    menghemat waktu dan sumber daya dalam pemeliharaan dan pembaruan.
+  7. Mengapa responsive design menjadi konsep yang penting dalam pengembangan aplikasi web? Berikan contoh aplikasi yang sudah dan belum menerapkan responsive design!
 
-  3. Jelaskan perbedaan antara margin, border, dan padding, serta cara untuk mengimplementasikan ketiga hal tersebut!
+    1) Responsive design adalah konsep penting dalam pengembangan aplikasi web karena beberapa alasan berikut:
+      - Pengalaman Pengguna yang Lebih Baik
+      Dengan responsive design, aplikasi web dapat menyesuaikan tampilan dan 
+      fungsionalitasnya berdasarkan ukuran layar perangkat pengguna (desktop, 
+      tablet, smartphone). Ini meningkatkan kenyamanan dan kepuasan pengguna.
+      - Meningkatkan Aksesibilitas
+      Aplikasi yang responsif memungkinkan pengguna dengan berbagai jenis 
+      perangkat untuk mengakses konten dengan cara yang mudah. Hal ini penting 
+      karena pengguna menggunakan berbagai perangkat dengan ukuran layar yang 
+      berbeda.
+      - Efisiensi Pengembangan
+      Mengembangkan satu versi aplikasi yang responsif lebih efisien 
+      dibandingkan dengan membuat versi terpisah untuk berbagai perangkat. Ini 
+      menghemat waktu dan sumber daya dalam pemeliharaan dan pembaruan.
+
+  8. Jelaskan perbedaan antara margin, border, dan padding, serta cara untuk mengimplementasikan ketiga hal tersebut!
+
     1)  Margin
     Definisi: Margin adalah ruang di luar batas elemen. Ini menciptakan jarak 
     antara elemen tersebut dan elemen lain di sekitarnya.
@@ -1264,6 +1266,7 @@ TUGAS 5
         margin-bottom: 20px;
         margin-left: 5px;
       }
+
     2) Border
       Definisi: Border adalah garis yang mengelilingi elemen, berada diantara 
       margin dan padding.
@@ -1283,6 +1286,7 @@ TUGAS 5
           border-style: dashed;
           border-color: red;
         }
+
     3) Padding
       Definisi: Padding adalah ruang di dalam batas elemen, antara konten 
       elemen dan border.
@@ -1304,21 +1308,26 @@ TUGAS 5
         padding-bottom: 10px;
         padding-left: 20px;
       }
-  4. 
-    Berikut adalah penjelasan tentang masing-masing konsep serta kegunaannya:
+      
+  8. Jelaskan konsep flex box dan grid layout beserta kegunaannya!
+
     1) Flex
       1. Kontainer Flex
       Definisi: Kontainer flex adalah elemen induk yang menggunakan properti display: flex atau display: inline-flex. Ini membuat semua elemen anak di dalam kontainer berperilaku sebagai item flex.
+
       2. Item Flex
       Definisi: Item flex adalah elemen anak yang ada di dalam kontainer flex. Mereka akan beradaptasi dengan ukuran kontainer dan dapat diatur dalam berbagai cara.
+
       3. Arah Flex
       flex-direction: Properti ini menentukan arah item flex dalam kontainer. Nilai yang bisa digunakan antara lain:
       row: Item disusun secara horizontal (default).
       row-reverse: Item disusun secara horizontal dari kanan ke kiri.
       column: Item disusun secara vertikal.
       column-reverse: Item disusun secara vertikal dari bawah ke atas.
+
       4. Penyelarasan dan Distribusi
-      justify-content: Properti ini digunakan untuk mengatur distribusi ruang di sepanjang sumbu utama (main axis). Nilai yang umum digunakan antara lain:
+      justify-content: Properti ini digunakan untuk mengatur distribusi ruang di sepanjang sumbu utama (main 
+      axis). Nilai yang umum digunakan antara lain:
 
       flex-start: Item ditempatkan di awal sumbu.
       flex-end: Item ditempatkan di akhir sumbu.
@@ -1332,36 +1341,58 @@ TUGAS 5
       center: Item diselaraskan di tengah sumbu silang.
       baseline: Item diselaraskan berdasarkan garis dasar teks.
       stretch: Item diperluas untuk mengisi ruang sumbu silang (default).
+
       5. Ukuran Item Flex
-      flex-grow: Menentukan seberapa banyak item flex dapat tumbuh untuk mengisi ruang yang tersedia. Nilai default adalah 0, yang berarti item tidak tumbuh.
+      flex-grow: Menentukan seberapa banyak item flex dapat tumbuh untuk mengisi ruang yang tersedia. Nilai 
+      default adalah 0, yang berarti item tidak tumbuh.
 
-      flex-shrink: Menentukan seberapa banyak item flex dapat menyusut ketika ruang dalam kontainer kurang. Nilai default adalah 1, yang berarti item dapat menyusut.
+      flex-shrink: Menentukan seberapa banyak item flex dapat menyusut ketika ruang dalam kontainer kurang. 
+      Nilai default adalah 1, yang berarti item dapat menyusut.
 
-      flex-basis: Menentukan ukuran awal item sebelum ruang dibagi. Nilai ini bisa berupa ukuran tetap (misalnya, 200px) atau auto (ukuran konten).
+      flex-basis: Menentukan ukuran awal item sebelum ruang dibagi. Nilai ini bisa berupa ukuran tetap 
+      (misalnya, 200px) atau auto (ukuran konten).
 
-      flex: Merupakan shorthand untuk mengatur flex-grow, flex-shrink, dan flex-basis dalam satu properti. Contoh: flex: 1 1 200px;.
+      flex: Merupakan shorthand untuk mengatur flex-grow, flex-shrink, dan flex-basis dalam satu properti. 
+      Contoh: flex: 1 1 200px;.
     
     2) Grid Layout
+    
       1. Prinsip Dasar Grid Layout
-      - Grid layout memungkinkan desainer untuk mengelola elemen dalam dua dimensi (horizontal dan vertikal) secara bersamaan. 
+      - Grid layout memungkinkan desainer untuk mengelola elemen dalam dua dimensi (horizontal dan vertikal) 
+      secara bersamaan. 
 
-      - Desain Responsif: Salah satu kekuatan grid adalah kemampuannya untuk menyesuaikan diri dengan berbagai ukuran layar dan orientasi perangkat. Desain responsif memastikan bahwa tata letak tetap terlihat baik dan fungsional, terlepas dari apakah pengguna mengaksesnya melalui smartphone, tablet, atau desktop.
+      - Desain Responsif: Salah satu kekuatan grid adalah kemampuannya untuk menyesuaikan diri dengan 
+      berbagai ukuran layar dan orientasi perangkat. Desain responsif memastikan bahwa tata letak tetap 
+      terlihat baik dan fungsional, terlepas dari apakah pengguna mengaksesnya melalui smartphone, tablet, 
+      atau desktop.
 
       2. Komponen Grid
-      - Kontainer Grid: Ini adalah elemen induk yang menampung semua item grid. Kontainer grid didefinisikan dengan menggunakan display: grid atau display: inline-grid, yang memungkinkan konten di dalamnya mengikuti struktur grid.
+      - Kontainer Grid: Ini adalah elemen induk yang menampung semua item grid. Kontainer grid didefinisikan 
+      dengan menggunakan display: grid atau display: inline-grid, yang memungkinkan konten di dalamnya 
+      mengikuti struktur grid.
 
-      - Item Grid: Elemen anak di dalam kontainer grid, setiap item grid dapat diposisikan dan diatur sesuai dengan struktur yang telah ditetapkan. Item grid dapat berupa teks, gambar, tombol, atau elemen lainnya.
+      - Item Grid: Elemen anak di dalam kontainer grid, setiap item grid dapat diposisikan dan diatur sesuai 
+      dengan struktur yang telah ditetapkan. Item grid dapat berupa teks, gambar, tombol, atau elemen lainnya.
 
-      - Garis Grid: Garis-garis ini memisahkan kolom dan baris dalam grid. Mereka digunakan sebagai referensi untuk memposisikan item grid di dalam grid.
+      - Garis Grid: Garis-garis ini memisahkan kolom dan baris dalam grid. Mereka digunakan sebagai referensi 
+      untuk memposisikan item grid di dalam grid.
 
-      - Sel Grid: Ruang antara dua garis grid yang berdekatan. Setiap sel dapat diisi dengan satu atau lebih item grid, memungkinkan penempatan elemen yang lebih dinamis.
+      - Sel Grid: Ruang antara dua garis grid yang berdekatan. Setiap sel dapat diisi dengan satu atau lebih 
+      item grid, memungkinkan penempatan elemen yang lebih dinamis.
 
-      - Area Grid: Area persegi panjang yang didefinisikan oleh garis grid. Area ini dapat diberi nama untuk meningkatkan keterbacaan kode dan memudahkan pemeliharaan. Misalnya, area yang dinamai dapat digunakan untuk mendefinisikan area header, footer, dan konten utama dalam layout.
+      - Area Grid: Area persegi panjang yang didefinisikan oleh garis grid. Area ini dapat diberi nama untuk 
+      meningkatkan keterbacaan kode dan memudahkan pemeliharaan. Misalnya, area yang dinamai dapat digunakan 
+      untuk mendefinisikan area header, footer, dan konten utama dalam layout.
 
       3. Memposisikan Grid Item
-      - grid-column: Menentukan kolom mana yang harus ditempati oleh sebuah item. Misalnya, grid-column: 1 / 3; akan membuat item mengambil ruang dari kolom pertama hingga kolom kedua (tidak termasuk kolom ketiga).
+      - grid-column: Menentukan kolom mana yang harus ditempati oleh sebuah item. Misalnya, grid-column: 1 / 
+      3; akan membuat item mengambil ruang dari kolom pertama hingga kolom kedua (tidak termasuk kolom 
+      ketiga).
 
-      - grid-row: Menentukan baris mana yang harus ditempati oleh sebuah item. Contoh: grid-row: 2 / 4; akan membuat item mengambil ruang dari baris kedua hingga ketiga.
+      - grid-row: Menentukan baris mana yang harus ditempati oleh sebuah item. Contoh: grid-row: 2 / 4; akan 
+      membuat item mengambil ruang dari baris kedua hingga ketiga.
 
-      - grid-area: Ini adalah singkatan untuk mendefinisikan baik penempatan baris maupun kolom, sering digunakan ketika Anda telah mendefinisikan area grid yang dinamai. Misalnya, grid-area: header; akan menempatkan item di area yang dinamai "header".
+      - grid-area: Ini adalah singkatan untuk mendefinisikan baik penempatan baris maupun kolom, sering 
+      digunakan ketika Anda telah mendefinisikan area grid yang dinamai. Misalnya, grid-area: header; akan 
+      menempatkan item di area yang dinamai "header".
 
