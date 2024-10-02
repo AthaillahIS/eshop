@@ -432,82 +432,82 @@ TUGAS 4
     
 TUGAS 5
   1. Implementasikan fungsi untuk menghapus dan mengedit product.
-    1) Langkah yang dilakukan.
-      1. Edit
-        -  Buat file html yang menampilkan order dalam entries. Dalam kode ini yaitu file order_card.html.
-        - File order_card.html merender meta data model yang telah diisi oleh user, beserta tombol edit<"a 
-        href="{% url 'main:edit_order' order_entry.pk %} ...> Edit <"/a> dan tombol delete <"a href="{% url 
-        'main:delete_order' order_entry.pk %}" <"/a>
-        -  Tombol edit memanggil reference url path('edit-order/<uuid:id>', edit_order, name='edit_order'), 
-        sehingga user function edit_order akan dijalankan dan user akan di redirect menuju domain /edit-order
-        - user melakukan request GET 
-        -  Function akan mengambil objek order berdasarkan pk id order:
-          order = Entry.objects.get(pk = id)
-        - edit_order.html akan dirender
-          context = {'form': form}
-          return render(request, "edit_order.html", context)
-        - Flexbox Layout dalam edit_order.html:
-          html
-          <div class="flex flex-col min-h-screen bg-gray-200">
-          flex: Mengatur elemen sebagai flex container, memungkinkan penggunaan model flexbox untuk tata 
-          letak.
-          flex-col: Menetapkan arah sumbu utama ke kolom, sehingga elemen anak disusun secara vertikal.
-          min-h-screen: Memberikan tinggi minimal setara dengan tinggi viewport, memastikan elemen mengambil 
-          setidaknya seluruh tinggi layar.
-          bg-gray-200: Mengatur latar belakang elemen menjadi warna abu-abu muda.
 
-          - Container:
-          <div class="container mx-auto px-5 py-10 mt-16 max-w-lg">
-          container: Mengatur elemen dengan lebar maksimum, secara otomatis memusatkan konten.
-          mx-auto: Mengatur margin kiri dan kanan otomatis, memusatkan elemen dalam kontainer.
-          px-5: Menambahkan padding horizontal (kiri dan kanan) sebesar 20px.
-          py-10: Menambahkan padding vertikal (atas dan bawah) sebesar 40px.
-          mt-16: Memberikan margin atas sebesar 64px.
-          max-w-lg: Mengatur lebar maksimum elemen menjadi besar (lebar yang telah ditentukan dalam Tailwind).
+    1) Edit
+      -  Buat file html yang menampilkan order dalam entries. Dalam kode ini yaitu file order_card.html.
+      - File order_card.html merender meta data model yang telah diisi oleh user, beserta tombol edit<"a 
+      href="{% url 'main:edit_order' order_entry.pk %} ...> Edit <"/a> dan tombol delete <"a href="{% url 
+      'main:delete_order' order_entry.pk %}" <"/a>
+      -  Tombol edit memanggil reference url path('edit-order/<uuid:id>', edit_order, name='edit_order'), 
+      sehingga user function edit_order akan dijalankan dan user akan di redirect menuju domain /edit-order
+      - user melakukan request GET 
+      -  Function akan mengambil objek order berdasarkan pk id order:
+        order = Entry.objects.get(pk = id)
+      - edit_order.html akan dirender
+        context = {'form': form}
+        return render(request, "edit_order.html", context)
+      - Flexbox Layout dalam edit_order.html:
+        html
+        <div class="flex flex-col min-h-screen bg-gray-200">
+        flex: Mengatur elemen sebagai flex container, memungkinkan penggunaan model flexbox untuk tata 
+        letak.
+        flex-col: Menetapkan arah sumbu utama ke kolom, sehingga elemen anak disusun secara vertikal.
+        min-h-screen: Memberikan tinggi minimal setara dengan tinggi viewport, memastikan elemen mengambil 
+        setidaknya seluruh tinggi layar.
+        bg-gray-200: Mengatur latar belakang elemen menjadi warna abu-abu muda.
 
-          - Typography:
-          <h1 class="text-4xl font-extrabold text-center mb-6 text-gray-900">
-          text-4xl: Mengatur ukuran font menjadi 36px.
-          font-extrabold: Mengatur berat font menjadi ekstra tebal.
-          text-center: Menyelaraskan teks ke tengah.
-          mb-6: Menambahkan margin bawah sebesar 24px.
-          text-gray-900: Mengatur warna teks menjadi abu-abu gelap.
-          Formulir dan Input:
+        - Container:
+        <div class="container mx-auto px-5 py-10 mt-16 max-w-lg">
+        container: Mengatur elemen dengan lebar maksimum, secara otomatis memusatkan konten.
+        mx-auto: Mengatur margin kiri dan kanan otomatis, memusatkan elemen dalam kontainer.
+        px-5: Menambahkan padding horizontal (kiri dan kanan) sebesar 20px.
+        py-10: Menambahkan padding vertikal (atas dan bawah) sebesar 40px.
+        mt-16: Memberikan margin atas sebesar 64px.
+        max-w-lg: Mengatur lebar maksimum elemen menjadi besar (lebar yang telah ditentukan dalam Tailwind).
 
-          <div class="flex flex-col">
-          flex: Mengatur elemen sebagai flex container.
-          flex-col: Menyusun elemen anak secara vertikal, seperti label, input, dan kesalahan.
-          
-          - Teks Bantuan dan Kesalahan:
-          <p class="mt-1 text-xs text-gray-500">{{ field.help_text }}</p>
-          <p class="mt-1 text-xs text-red-600">{{ error }}</p>
-          mt-1: Menambahkan margin atas sebesar 4px.
-          text-xs: Mengatur ukuran font menjadi sangat kecil.
-          text-gray-500: Mengatur warna teks menjadi abu-abu menengah untuk teks bantuan.
-          text-red-600: Mengatur warna teks menjadi merah untuk menandakan kesalahan.
-          
-          - Tombol:
-          <button type="submit" class="bg-gray-900 text-white font-semibold px-6 py-3 rounded-lg hover:bg-gray-700 w-full">
-          bg-gray-900: Mengatur latar belakang tombol menjadi warna abu-abu gelap.
-          text-white: Mengatur warna teks tombol menjadi putih.
-          font-semibold: Mengatur berat font menjadi semi-tebal.
-          px-6: Menambahkan padding horizontal (kiri dan kanan) sebesar 24px.
-          py-3: Menambahkan padding vertikal (atas dan bawah) sebesar 12px.
-          rounded-lg: Memberikan sudut melengkung pada tombol.
-          hover:bg-gray-700: Mengubah latar belakang tombol menjadi abu-abu lebih terang saat di-hover.
-          w-full: Mengatur lebar tombol agar memenuhi seluruh lebar kontainer.
-          
-          - Ruang Antar Elemen:
-          <div class="space-y-5">
-          space-y-5: Menambahkan jarak vertikal antara elemen anak sebesar 20px, kecuali elemen terakhir.
+        - Typography:
+        <h1 class="text-4xl font-extrabold text-center mb-6 text-gray-900">
+        text-4xl: Mengatur ukuran font menjadi 36px.
+        font-extrabold: Mengatur berat font menjadi ekstra tebal.
+        text-center: Menyelaraskan teks ke tengah.
+        mb-6: Menambahkan margin bawah sebesar 24px.
+        text-gray-900: Mengatur warna teks menjadi abu-abu gelap.
+        Formulir dan Input:
 
-        - Saat user menekan button sava change dan isi form sudah benar maka user akan mengirimkan POST 
-        Request dan redirect ke page / yang dirender function show_main     
-        if form.is_valid() and request.method == "POST":
-          form.save()
-          return HttpResponseRedirect(reverse('main:show_main'))
+        <div class="flex flex-col">
+        flex: Mengatur elemen sebagai flex container.
+        flex-col: Menyusun elemen anak secara vertikal, seperti label, input, dan kesalahan.
+        
+        - Teks Bantuan dan Kesalahan:
+        <p class="mt-1 text-xs text-gray-500">{{ field.help_text }}</p>
+        <p class="mt-1 text-xs text-red-600">{{ error }}</p>
+        mt-1: Menambahkan margin atas sebesar 4px.
+        text-xs: Mengatur ukuran font menjadi sangat kecil.
+        text-gray-500: Mengatur warna teks menjadi abu-abu menengah untuk teks bantuan.
+        text-red-600: Mengatur warna teks menjadi merah untuk menandakan kesalahan.
+        
+        - Tombol:
+        <button type="submit" class="bg-gray-900 text-white font-semibold px-6 py-3 rounded-lg hover:bg-gray-700 w-full">
+        bg-gray-900: Mengatur latar belakang tombol menjadi warna abu-abu gelap.
+        text-white: Mengatur warna teks tombol menjadi putih.
+        font-semibold: Mengatur berat font menjadi semi-tebal.
+        px-6: Menambahkan padding horizontal (kiri dan kanan) sebesar 24px.
+        py-3: Menambahkan padding vertikal (atas dan bawah) sebesar 12px.
+        rounded-lg: Memberikan sudut melengkung pada tombol.
+        hover:bg-gray-700: Mengubah latar belakang tombol menjadi abu-abu lebih terang saat di-hover.
+        w-full: Mengatur lebar tombol agar memenuhi seluruh lebar kontainer.
+        
+        - Ruang Antar Elemen:
+        <div class="space-y-5">
+        space-y-5: Menambahkan jarak vertikal antara elemen anak sebesar 20px, kecuali elemen terakhir.
+
+      - Saat user menekan button sava change dan isi form sudah benar maka user akan mengirimkan POST 
+      Request dan redirect ke page / yang dirender function show_main     
+      if form.is_valid() and request.method == "POST":
+        form.save()
+        return HttpResponseRedirect(reverse('main:show_main'))
       
-      2. Delete
+    2) Delete
       - jika user menekan tombol delete maka user akan melakukan GET request untuk delete metadata order 
       sesuai dengan primary key id order
       def delete_order(request, id):
@@ -517,6 +517,7 @@ TUGAS 5
       - kemudian user akan di redirect ke home page
 
   2. Kustomisasi halaman login, register, dan tambah product semenarik mungkin.
+
     1) Implementasi tailwind css pada halaman login
       - Container Utama:
       <div class="min-h-screen bg-gray-100 text-gray-900 py-6 flex flex-col justify-center items-center">
@@ -884,6 +885,7 @@ TUGAS 5
 
   3. Kustomisasi halaman daftar product menjadi lebih menarik dan responsive. Kemudian, perhatikan kondisi 
   berikut:
+  
     1) Jika pada aplikasi belum ada product yang tersimpan, halaman daftar product akan menampilkan gambar dan pesan bahwa belum ada product yang terdaftar.
       - Pesan Ketika Tidak Ada Data Order:
       {% if not order_entries %}
