@@ -1043,6 +1043,7 @@ TUGAS 5
 
 
   4.  Untuk setiap card product, buatlah dua buah button untuk mengedit dan menghapus product pada card tersebut!
+
     1) Button edit dan hapus produk
       - Tombol edit dan hapus
       <div class="flex justify-end p-2">
@@ -1069,6 +1070,7 @@ TUGAS 5
 
 
   5. Navbar
+
     1) Untuk device berukuran medium
       -  Navigasi Utama:
       <nav class="bg-gray-900 shadow-lg fixed top-0 left-0 z-40 w-screen">
@@ -1132,7 +1134,8 @@ TUGAS 5
       </div>
       <div>: Elemen untuk menampung tautan navigasi.
       Tailwind CSS:
-      hidden md:flex: Menyembunyikan elemen pada layar kecil, menampilkannya sebagai flex container pada layar sedang ke atas.
+      hidden md:flex: Menyembunyikan elemen pada layar kecil, menampilkannya sebagai flex container pada 
+      layar sedang ke atas.
       justify-center: Menyelaraskan elemen anak ke tengah secara horizontal.
       flex-grow: Memungkinkan div untuk tumbuh mengisi ruang yang tersisa.
       Tautan Logout dan Login/Register:
@@ -1309,7 +1312,7 @@ TUGAS 5
         padding-left: 20px;
       }
       
-  8. Jelaskan konsep flex box dan grid layout beserta kegunaannya!
+  9. Jelaskan konsep flex box dan grid layout beserta kegunaannya!
 
     1) Flex
       1. Kontainer Flex
