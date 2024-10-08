@@ -1680,60 +1680,60 @@ A.  Mengubah tugas 5 yang telah dibuat sebelumnya menjadi menggunakan AJAX.
         refreshOrderEntries();
         refreshOrderEntries(): Memanggil fungsi ini saat halaman dimuat untuk memuat entri pesanan secara asinkronus dan memperbarui tampilan.
 
-2. Jelaskan manfaat dari penggunaan JavaScript dalam pengembangan aplikasi web!
+  2. Jelaskan manfaat dari penggunaan JavaScript dalam pengembangan aplikasi web!
 
-  1) Interaktivitas
-    JavaScript memungkinkan pengembang untuk menambahkan elemen interaktif pada halaman web, seperti animasi, efek transisi, dan respons langsung terhadap tindakan pengguna. Hal ini membuat pengalaman pengguna lebih menarik dan dinamis.
+    1) Interaktivitas
+      JavaScript memungkinkan pengembang untuk menambahkan elemen interaktif pada halaman web, seperti animasi, efek transisi, dan respons langsung terhadap tindakan pengguna. Hal ini membuat pengalaman pengguna lebih menarik dan dinamis.
 
-  2) Manipulasi DOM
-    JavaScript dapat digunakan untuk mengakses dan memanipulasi Document Object Model (DOM). Ini memungkinkan pengembang untuk memperbarui konten, struktur, dan gaya elemen HTML secara real-time tanpa perlu memuat ulang halaman.
+    2) Manipulasi DOM
+      JavaScript dapat digunakan untuk mengakses dan memanipulasi Document Object Model (DOM). Ini memungkinkan pengembang untuk memperbarui konten, struktur, dan gaya elemen HTML secara real-time tanpa perlu memuat ulang halaman.
 
-  3) Validasi Formulir
-    Dengan JavaScript, pengembang dapat melakukan validasi data di sisi klien sebelum mengirimkan data ke server. Ini membantu mencegah kesalahan dan memastikan data yang dikirimkan memenuhi kriteria tertentu, sehingga meningkatkan efisiensi dan pengalaman pengguna.
+    3) Validasi Formulir
+      Dengan JavaScript, pengembang dapat melakukan validasi data di sisi klien sebelum mengirimkan data ke server. Ini membantu mencegah kesalahan dan memastikan data yang dikirimkan memenuhi kriteria tertentu, sehingga meningkatkan efisiensi dan pengalaman pengguna.
 
-  4) Komunikasi Asinkron (AJAX)
-    JavaScript memungkinkan penggunaan AJAX (Asynchronous JavaScript and XML), yang memungkinkan halaman web untuk berkomunikasi dengan server secara asinkron. Ini memungkinkan pengambilan data baru tanpa memuat ulang seluruh halaman, meningkatkan kinerja aplikasi.
+    4) Komunikasi Asinkron (AJAX)
+      JavaScript memungkinkan penggunaan AJAX (Asynchronous JavaScript and XML), yang memungkinkan halaman web untuk berkomunikasi dengan server secara asinkron. Ini memungkinkan pengambilan data baru tanpa memuat ulang seluruh halaman, meningkatkan kinerja aplikasi.
 
-  5) Pengembangan Aplikasi Single Page (SPA)
-    JavaScript memungkinkan pengembangan aplikasi web satu halaman (SPA), di mana seluruh aplikasi dimuat dalam satu halaman dan konten baru diambil dan ditampilkan secara dinamis. Ini meningkatkan kecepatan dan responsivitas aplikasi.
+    5) Pengembangan Aplikasi Single Page (SPA)
+      JavaScript memungkinkan pengembangan aplikasi web satu halaman (SPA), di mana seluruh aplikasi dimuat dalam satu halaman dan konten baru diambil dan ditampilkan secara dinamis. Ini meningkatkan kecepatan dan responsivitas aplikasi.
 
-  6) Keterhubungan dengan API
-    JavaScript dapat digunakan untuk terhubung dengan berbagai API (Application Programming Interfaces), memungkinkan aplikasi web untuk mengakses data dari sumber eksternal. Ini memberi kemampuan untuk mengintegrasikan layanan pihak ketiga, seperti pembayaran online, peta, dan media sosial.
+    6) Keterhubungan dengan API
+      JavaScript dapat digunakan untuk terhubung dengan berbagai API (Application Programming Interfaces), memungkinkan aplikasi web untuk mengakses data dari sumber eksternal. Ini memberi kemampuan untuk mengintegrasikan layanan pihak ketiga, seperti pembayaran online, peta, dan media sosial.
 
-  7) Cross-Platform dan Kompatibilitas
-    JavaScript dapat dijalankan di berbagai platform dan perangkat, termasuk desktop, tablet, dan smartphone. Hal ini membuatnya ideal untuk pengembangan aplikasi web yang responsif dan dapat diakses oleh pengguna di berbagai perangkat.
+    7) Cross-Platform dan Kompatibilitas
+      JavaScript dapat dijalankan di berbagai platform dan perangkat, termasuk desktop, tablet, dan smartphone. Hal ini membuatnya ideal untuk pengembangan aplikasi web yang responsif dan dapat diakses oleh pengguna di berbagai perangkat.
 
-  8) Framework dan Library
-    Terdapat banyak framework dan library JavaScript, seperti React, Angular, dan Vue.js, yang membantu pengembang dalam membangun aplikasi dengan lebih cepat dan efisien. Framework ini menyediakan struktur dan komponen yang siap digunakan, sehingga mengurangi waktu pengembangan.
+    8) Framework dan Library
+      Terdapat banyak framework dan library JavaScript, seperti React, Angular, dan Vue.js, yang membantu pengembang dalam membangun aplikasi dengan lebih cepat dan efisien. Framework ini menyediakan struktur dan komponen yang siap digunakan, sehingga mengurangi waktu pengembangan.
 
-  9) Kemampuan Pengembangan Backend
-    Dengan munculnya lingkungan seperti Node.js, JavaScript juga dapat digunakan untuk pengembangan backend. Ini memungkinkan pengembang untuk menggunakan satu bahasa pemrograman (JavaScript) untuk seluruh tumpukan pengembangan, baik di sisi klien maupun server.
+    9) Kemampuan Pengembangan Backend
+      Dengan munculnya lingkungan seperti Node.js, JavaScript juga dapat digunakan untuk pengembangan backend. Ini memungkinkan pengembang untuk menggunakan satu bahasa pemrograman (JavaScript) untuk seluruh tumpukan pengembangan, baik di sisi klien maupun server.
 
-3. Jelaskan fungsi dari penggunaan await ketika kita menggunakan fetch()! Apa yang akan terjadi jika kita tidak menggunakan await?
+  3. Jelaskan fungsi dari penggunaan await ketika kita menggunakan fetch()! Apa yang akan terjadi jika kita tidak menggunakan await?
 
-  1) Fungsi await dalam fetch()
-    - Menunggu Resolusi Promise: Ketika kita memanggil fetch(), fungsi ini mengembalikan sebuah Promise yang merepresentasikan hasil dari permintaan HTTP yang dilakukan. Dengan menggunakan await, kita memberitahu JavaScript untuk menunggu hingga Promise tersebut diselesaikan (resolved) sebelum melanjutkan eksekusi kode berikutnya.
-    - Mendapatkan Data dengan Lebih Mudah: Dengan await, kita bisa langsung mendapatkan hasil dari Promise tanpa harus menggunakan method .then(). Ini membuat kode lebih bersih dan lebih mudah dibaca.
-  2) Apa yang Terjadi Jika Tidak Menggunakan await?
-    - Eksekusi Berlanjut Tanpa Menunggu: Jika kita tidak menggunakan await, kode setelah pemanggilan fetch() akan langsung dieksekusi tanpa menunggu hasil dari permintaan tersebut. Ini bisa menyebabkan kode mencoba mengakses hasil dari fetch() yang belum tersedia, sehingga menghasilkan nilai undefined atau error.
-    - Kesulitan dalam Mengelola Kode Asinkron: Tanpa await, kita harus menggunakan .then() untuk menangani Promise, yang bisa membuat kode menjadi lebih sulit dibaca dan dikelola, terutama jika ada beberapa level pemanggilan fungsi asinkron.
+    1) Fungsi await dalam fetch()
+      - Menunggu Resolusi Promise: Ketika kita memanggil fetch(), fungsi ini mengembalikan sebuah Promise yang merepresentasikan hasil dari permintaan HTTP yang dilakukan. Dengan menggunakan await, kita memberitahu JavaScript untuk menunggu hingga Promise tersebut diselesaikan (resolved) sebelum melanjutkan eksekusi kode berikutnya.
+      - Mendapatkan Data dengan Lebih Mudah: Dengan await, kita bisa langsung mendapatkan hasil dari Promise tanpa harus menggunakan method .then(). Ini membuat kode lebih bersih dan lebih mudah dibaca.
+    2) Apa yang Terjadi Jika Tidak Menggunakan await?
+      - Eksekusi Berlanjut Tanpa Menunggu: Jika kita tidak menggunakan await, kode setelah pemanggilan fetch() akan langsung dieksekusi tanpa menunggu hasil dari permintaan tersebut. Ini bisa menyebabkan kode mencoba mengakses hasil dari fetch() yang belum tersedia, sehingga menghasilkan nilai undefined atau error.
+      - Kesulitan dalam Mengelola Kode Asinkron: Tanpa await, kita harus menggunakan .then() untuk menangani Promise, yang bisa membuat kode menjadi lebih sulit dibaca dan dikelola, terutama jika ada beberapa level pemanggilan fungsi asinkron.
 
-4. Mengapa kita perlu menggunakan decorator csrf_exempt pada view yang akan digunakan untuk AJAX POST?
+  4. Mengapa kita perlu menggunakan decorator csrf_exempt pada view yang akan digunakan untuk AJAX POST?
 
-  1) 
-    Decorator @csrf_exempt digunakan untuk menghindari kegagalan request yang dilakukan. Ketika menggunakan AJAX untuk mengirimkan permintaan POST, token CSRF harus disertakan dalam header permintaan atau dalam body. Dengan menggunakan @csrf_exempt, maka view diijinkan untuk menerima permintaan POST tanpa memerlukan verifikasi CSRF. Ini bermanfaat dalam situasi untuk mengontrol akses dan tidak mempersulit pengguna yang berinteraksi dengan API atau fungsionalitas tertentu. Meskipun mengizinkan permintaan POST tanpa token CSRF dapat memudahkan integrasi dan penggunaan AJAX, ini juga membuat aplikasi lebih rentan terhadap serangan CSRF.
+    1) 
+      Decorator @csrf_exempt digunakan untuk menghindari kegagalan request yang dilakukan. Ketika menggunakan AJAX untuk mengirimkan permintaan POST, token CSRF harus disertakan dalam header permintaan atau dalam body. Dengan menggunakan @csrf_exempt, maka view diijinkan untuk menerima permintaan POST tanpa memerlukan verifikasi CSRF. Ini bermanfaat dalam situasi untuk mengontrol akses dan tidak mempersulit pengguna yang berinteraksi dengan API atau fungsionalitas tertentu. Meskipun mengizinkan permintaan POST tanpa token CSRF dapat memudahkan integrasi dan penggunaan AJAX, ini juga membuat aplikasi lebih rentan terhadap serangan CSRF.
 
-5. Pada tutorial PBP minggu ini, pembersihan data input pengguna dilakukan di belakang (backend) juga. Mengapa hal tersebut tidak dilakukan di frontend saja?
+  5. Pada tutorial PBP minggu ini, pembersihan data input pengguna dilakukan di belakang (backend) juga. Mengapa hal tersebut tidak dilakukan di frontend saja?
 
-  1) Membersihkan data di frontend saja tidak cukup karena beberapa alasan penting yang berkaitan dengan keamanan dan integritas aplikasi:
-    - Manipulasi Pengguna:
-    Pengguna dapat dengan mudah memodifikasi atau menonaktifkan skrip JavaScript di browser mereka. Ini berarti bahwa validasi atau pembersihan yang dilakukan di frontend dapat diabaikan atau dimodifikasi oleh penyerang.
-    
-    - Data Berbahaya:
-    Penyerang dapat mengirimkan data berbahaya secara langsung ke server menggunakan alat seperti Postman atau curl, tanpa melalui frontend. Jika hanya bergantung pada pembersihan di frontend, server akan tetap menerima data yang tidak valid atau berbahaya.
-    
-    - Keamanan Server:
-    Server harus memiliki kontrol penuh atas data yang diterima. Tanpa pembersihan dan validasi di backend, server rentan terhadap berbagai jenis serangan, seperti SQL Injection, Cross-Site Scripting (XSS), dan Command Injection.
-    
-    - Integritas Data:
-    Validasi di backend membantu memastikan bahwa data yang masuk ke database atau diproses oleh aplikasi adalah valid dan konsisten. Data yang tidak valid dapat menyebabkan kerusakan pada aplikasi dan mengganggu pengalaman pengguna.
+    1) Membersihkan data di frontend saja tidak cukup karena beberapa alasan penting yang berkaitan dengan keamanan dan integritas aplikasi:
+      - Manipulasi Pengguna:
+      Pengguna dapat dengan mudah memodifikasi atau menonaktifkan skrip JavaScript di browser mereka. Ini berarti bahwa validasi atau pembersihan yang dilakukan di frontend dapat diabaikan atau dimodifikasi oleh penyerang.
+      
+      - Data Berbahaya:
+      Penyerang dapat mengirimkan data berbahaya secara langsung ke server menggunakan alat seperti Postman atau curl, tanpa melalui frontend. Jika hanya bergantung pada pembersihan di frontend, server akan tetap menerima data yang tidak valid atau berbahaya.
+      
+      - Keamanan Server:
+      Server harus memiliki kontrol penuh atas data yang diterima. Tanpa pembersihan dan validasi di backend, server rentan terhadap berbagai jenis serangan, seperti SQL Injection, Cross-Site Scripting (XSS), dan Command Injection.
+      
+      - Integritas Data:
+      Validasi di backend membantu memastikan bahwa data yang masuk ke database atau diproses oleh aplikasi adalah valid dan konsisten. Data yang tidak valid dapat menyebabkan kerusakan pada aplikasi dan mengganggu pengalaman pengguna.
