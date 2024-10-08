@@ -1399,3 +1399,341 @@ TUGAS 5
       digunakan ketika Anda telah mendefinisikan area grid yang dinamai. Misalnya, grid-area: header; akan 
       menempatkan item di area yang dinamai "header".
 
+Tugas 6
+A.  Mengubah tugas 5 yang telah dibuat sebelumnya menjadi menggunakan AJAX.
+  1. AJAX GET
+
+    1) Ubahlah kode cards data mood agar dapat mendukung AJAX GET.
+      - Penggunaan AJAX GET dalam kode dilakukan getOrderEntries() menggunakan asynchronus function yang melakukan fetch request terhadap url show_JSON, untuk mengambil data model dalam format JSON.
+          async function getOrderEntries() {
+              return fetch("{% url 'main:show_json' %}").then((res) => res.json())
+          }
+      - fetch akan melakukan request pada url show_json
+    
+    2)  Lakukan pengambilan data mood menggunakan AJAX GET. Pastikan bahwa data yang diambil hanyalah data 
+    milik pengguna yang logged-in.
+      - def show_json(request):
+        data = Entry.objects.filter(user=request.user)
+        return HttpResponse(serializers.serialize('json', data), content_type='aplication/json')
+        - serializers akan mengubah queryset (dalam hal ini, objek Entry berdasarkan user yang melakukan 
+        request) menjadi format JSON.
+      - kemudian getOrderEntries akan mereturn queryset objek Entry kepada fungsi yang melakukan await.
+  
+  2. AJAX POST
+
+    1) Buatlah sebuah tombol yang membuka sebuah modal dengan form untuk menambahkan mood.
+
+    1. Membuka Modal (eventListener onclick akan jalankan function showModal())
+      - <button data-modal-target="crudModal" data-modal-toggle="crudModal" class="btn bg-gray-900 
+      hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-lg" onclick="showModal();">
+            Add New Order Entry by AJAX
+        </button>
+        - data-modal target adalah elemen modal yang ingin ditampilkan atau disembunyikan, sedangkan 
+        data-modal-toggle digunakan untuk mengontrol visibilitas dari modal.
+        - dalam html tag button terdapat event handler onclick yang akan menjalankan script showModal setelah 
+        button Add New Order Entry by Ajax ditekan
+
+      - <div id="crudModal" tabindex="-1" aria-hidden="true" class="hidden fixed inset-0 z-50 w-full flex items-center justify-center bg-gray-800 bg-opacity-50">
+        <div id="crudModalContent" class="relative bg-white shadow-md rounded-lg w-5/6 sm:w-3/4 md:w-1/2 lg:w-1/3 mx-4 sm:mx-0 p-6">
+          ...
+          ...
+        </div>
+      </div>
+        - div diatas menyimpan id kontainer (flexbox) yang digunakan untuk memanipulasi kontrol modal, secara 
+        default modal  tersebut disembunyikan dengan class hidden dan aria-hidden (agar tidak terbaca dari 
+        screen reader), class dalam kontainer tersebut menampilkan layout sesuai tailwind css
+      
+        - function showModal() {
+              const modal = document.getElementById('crudModal');
+              const modalContent = document.getElementById('crudModalContent');
+
+              modal.classList.remove('hidden'); 
+              setTimeout(() => {
+                  modalContent.classList.remove('opacity-0', 'scale-95');
+                  modalContent.classList.add('opacity-100', 'scale-100');
+              }, 50); 
+          }
+          - fungsi shoModal akan mengambil elemen html tag yang memiliki id crudModal dan menghapus class hidden
+          dari crudModal agar modal ditampilkan.
+          - setTimeout(()) adalah fungsi yang digunakan untuk mengubah opacity modalContent dari transparan 
+          menjadi terlihat, timeout 50ms biar terlihat seperti ada animasi
+
+        2. Menutup Modal
+          - <button type="button" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-lg" id="cancelButton">Cancel</button>
+          <button type="submit" id="submitOrderEntry" form="orderEntryForm" class="bg-gray-900 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-lg ml-2">Save</button>
+          - dalam modal terdapat 2 button cancel (id = cancelButton) dan save (id = submitOrderEntry) yang 
+          akan ditambahkan eventlistener dalam script saat tombol diklik
+          <script>
+            ...
+            document.getElementById("cancelButton").addEventListener("click", hideModal);
+            document.getElementById("closeModalBtn").addEventListener("click", hideModal);
+            ...
+          </script> 
+          - getElementById akan mengambil DOM dengan id cancelButton dan closeModalBtn dan menjalankan function hideModal saat ada event "click"
+
+        - function hideModal() {
+              const modal = document.getElementById('crudModal');
+              const modalContent = document.getElementById('crudModalContent');
+
+              modalContent.classList.remove('opacity-100', 'scale-100');
+              modalContent.classList.add('opacity-0', 'scale-95');
+
+              setTimeout(() => {
+                  modal.classList.add('hidden');
+              }, 150); 
+          }
+          - hideModal akan mengubah opacity dari form menjadi transparan, dan menambahkan class hidden 
+          sehingga flexbox tidak terlihat
+
+    2) Buatlah fungsi view baru untuk menambahkan mood baru ke dalam basis data.
+        - <button type="submit" id="submitOrderEntry" form="orderEntryForm" class="bg-gray-900 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-lg ml-2">Save</button>
+        Dalam modal terdapat button submitOrderEntry yang akan menambahkan order ke dalam database dan menampilkan card infonya
+
+        - Dalam script terdapat queryselector id button submitOrderEntry yang ditambahkan event listener click, jika button di klik akan menjalankan fungsi addOrderEntry
+          document.getElementById("submitOrderEntry").onclick = addOrderEntry
+
+        - Fungsi addOrderEntry
+          function addOrderEntry() {
+            fetch("{% url 'main:add_order_entry_ajax' %}", {
+            method: "POST",
+            body: new FormData(document.querySelector('#orderEntryForm')),
+            })
+            .then(response => refreshOrderEntries())
+
+            document.getElementById("orderEntryForm").reset(); 
+            document.querySelector("[data-modal-toggle='crudModal']").click();
+
+            return false;
+        }
+        - Penggunaan fetch
+          Fungsi ini digunakan untuk melakukan permintaan HTTP (dalam hal ini, POST) ke URL yang ditentukan. URL diambil menggunakan template tag Django {% url 'main:add_order_entry_ajax' %}, yang akan menghasilkan URL untuk view add_order_entry_ajax.
+
+        - method: "POST": menunjukkan bahwa permintaan yang dilakukan adalah metode POST.
+
+        - body: new FormData(...): FormData digunakan untuk mengumpulkan data dari elemen form (#orderEntryForm) menjadi format yang bisa dikirim ke server.
+      
+        - Fungsi menambahkan data dari request POST user ke database
+        @csrf_exempt
+          @require_POST
+          def add_order_entry_ajax(request):
+              item_name = strip_tags(request.POST.get("item_name"))  # strip HTML tags!
+              description = strip_tags(request.POST.get("description"))  # strip HTML tags!
+              price = request.POST.get("price")
+              rating = request.POST.get("rating")
+              user = request.user
+
+              new_order = Entry(
+                  item_name=item_name, price=price,
+                  description=description, rating=rating,
+                  user=user
+              )
+              new_order.save()
+              return HttpResponse(b"CREATED", status=201)
+
+            - @csrf_exempt: Dekorator ini digunakan untuk menonaktifkan perlindungan CSRF (Cross-Site Request Forgery) 
+            @require_POST: Dekorator ini memastikan bahwa view hanya dapat diakses melalui metode HTTP POST.
+
+            - Mengambil Data dari Request
+            strip_tags(...): Fungsi ini digunakan untuk menghapus tag HTML dari string yang diambil.
+            description, price, rating: Melakukan hal yang sama dengan variabel item_name, tetapi tidak ada pembersihan tag HTML.
+            user = request.user: Mengambil informasi tentang pengguna yang saat ini sedang terautentikasi.
+
+            - Membuat dan Menyimpan Objek
+            Entry(...): Membuat objek baru dari model.
+            new_order.save(): Menyimpan objek new_order ke dalam database.
+
+            - Mengembalikan Respons
+            HttpResponse(b"CREATED", status=201): Mengembalikan respons HTTP dengan status 201 (Created) dan konten respons berupa string "CREATED". Status ini menunjukkan bahwa entri baru telah berhasil dibuat.
+
+        - .then(...): Setelah permintaan fetch selesai fungsi refreshOrderEntries akan dipanggil
+          refreshOrderEntries(): memuat ulang halaman.
+
+        - document.getElementById("orderEntryForm").reset();
+          reset(): Setelah entri order berhasil ditambahkan, form direset ke keadaan awalnya, menghapus semua input yang telah diisi oleh pengguna.
+
+        - Menutup Modal
+          document.querySelector("[data-modal-toggle='crudModal']").click();
+          .click(): Mengklik elemen yang memiliki atribut data-modal-toggle='crudModal'.  ini akan memicu fungsi hideModal() yang menyembunyikan modal setelah order ditambahkan.
+
+        - Menghentikan Perilaku Default
+        return false: Menghentikan perilaku default dari event yang memicu fungsi ini (seperti submit form) untuk memastikan bahwa halaman tidak dimuat ulang setelah pengiriman data.
+        
+    3) Buatlah path /create-ajax/ yang mengarah ke fungsi view yang baru kamu buat.
+      - Untuk buat path baru, maka path perlu ditambahkan dalam urls.py dipetakan menuju fungsi view yang ingin dijalankan
+        - import fungsi view yang ingin dijalankan (dalam hal ini)
+          from main.views import ..., add_order_entry_ajax
+        - Petakan fungsi dengan suatu path dengan menambahkan kode dibawah kedalam url patterns
+          path('add-order-entry-ajax', add_order_entry_ajax, name='add_order_entry_ajax'),
+        - jika reference path add_order_entry_ajax dipanggil, maka akan dijalankan function add_order_entry_ajax
+
+    4) Hubungkan form yang telah kamu buat di dalam modal kamu ke path /create-ajax/.
+      - <button type="submit" id="submitOrderEntry" form="orderEntryForm" class="bg-gray-900 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-lg ml-2">Save</button>
+      Button dengan id submitOrderForm yang diklik saat user menyimpan perubahan form akan dialihkan menuju fuction addOrderEntry oleh eventListener
+      document.getElementById("submitOrderEntry").onclick = addOrderEntry
+      - addOrderEntry kemudian akan melakukan fetch menuju path ajax add-order-entry-ajax dengan metode post dan body berisi form data yang diinput user.
+        fetch("{% url 'main:add_order_entry_ajax' %}", {
+        method: "POST",
+        body: new FormData(document.querySelector('#orderEntryForm')),
+        })
+        .then(response => refreshOrderEntries())
+
+    5) Lakukan refresh pada halaman utama secara asinkronus untuk menampilkan daftar mood terbaru tanpa reload halaman utama secara keseluruhan.
+      - Fungsi async memungkinkan function dijalankan secara bersamaan tanpa menunggu proses request lainnya selesai. 
+        async function refreshOrderEntries() {
+        document.getElementById("order_entry_cards").innerHTML = "";
+        document.getElementById("order_entry_cards").className = "";
+        const orderEntries = await getOrderEntries();
+        let htmlString = "";
+        let classNameString = "";
+        if (orderEntries.length === 0) {
+        classNameString = "flex flex-col items-center justify-center min-h-[24rem] p-6";
+        htmlString = `
+            <div class="flex flex-col items-center justify-center min-h-[24rem] p-6">
+                <img src="{% static 'image/sad-icon.png' %}" alt="Sad face" class="w-32 h-32 mb-4"/>
+                <p class="text-center text-gray-600 mt-4">No order data available in the e-shop.</p>
+            </div>
+        `;
+    }
+    else {
+        classNameString = "columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6 w-full"
+        orderEntries.forEach((item) => {
+            const item_name = DOMPurify.sanitize(item.fields.item_name);
+            const description = DOMPurify.sanitize(item.fields.description);
+            htmlString += `
+                <div class="relative break-inside-avoid flex flex-col items-center min-h-0 bg-gray-100">
+                    <div class="container mx-auto px-4 py-4 max-w-3xl"> <!-- Increased max-width -->
+                        <div class="relative bg-white shadow-md rounded-lg mb-6 border border-gray-300 w-full">
+                            <div class="p-4">
+                                <h3 class="font-bold text-lg text-gray-800">${item_name}</h3>
+                                <p class="text-gray-600">Date: ${item.fields.date}</p>
+                                <p class="text-gray-800 font-semibold">Price: ${item.fields.price}</p>
+                                <p class="text-gray-700">Description: ${description}</p>
+                                <p class="text-gray-700 font-semibold">Rating: ${item.fields.rating > 10 ? '10+' : item.fields.rating}</p>
+                            </div>
+                            <div class="flex justify-end p-2">
+                                <a href="/edit-order/${item.pk}" class="bg-yellow-500 hover:bg-yellow-600 text-white rounded-full p-2 transition duration-300 shadow-md mr-2">
+                                    Edit
+                                </a>
+                                <a href="/delete/${item.pk}" class="bg-red-500 hover:bg-red-600 text-white rounded-full p-2 transition duration-300 shadow-md">
+                                    Delete
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                `;
+            });
+        }
+        document.getElementById("order_entry_cards").className = classNameString;
+        document.getElementById("order_entry_cards").innerHTML = htmlString;
+        }
+        refreshOrderEntries();
+
+      - Mengosongkan Konten dan Kelas
+        document.getElementById("order_entry_cards").innerHTML = "";
+        document.getElementById("order_entry_cards").className = "";
+        innerHTML = "": Mengosongkan konten HTML dari elemen dengan ID order_entry_cards
+        className = "": Menghapus semua kelas CSS yang diterapkan pada elemen tersebut
+        Ini berguna untuk membersihkan tampilan lama sebelum menambahkan entri baru.
+
+        - Mengambil Data Enti Pesanan
+        const orderEntries = await getOrderEntries();
+        await getOrderEntries(): Memanggil fungsi getOrderEntries untuk mengambil data entri pesanan. Fungsi ini menggunakan fetch untuk melakukan permintaan ke server dan mengembalikan data entri dalam format JSON. Penggunaan await menunjukkan bahwa ini adalah operasi asynchronous, dan eksekusi fungsi akan ditunda hingga data diterima.
+
+        - Menyiapkan Variabel untuk Konten HTML
+        let htmlString = "";
+        let classNameString = "";
+        htmlString: Digunakan untuk menyimpan string HTML yang akan dibangun dari data entri yang diterima.
+        classNameString: Digunakan untuk menyimpan kelas CSS yang akan diterapkan pada elemen order_entry_cards.
+
+        - Memeriksa Jumlah Entri Pesanan
+          if (orderEntries.length === 0) {
+              classNameString = "flex flex-col items-center justify-center min-h-[24rem] p-6";
+              htmlString = `
+              <div class="flex flex-col items-center justify-center min-h-[24rem] p-6">
+                  <img src="{% static 'image/sad-icon.png' %}" alt="Sad face" class="w-32 h-32 mb-4"/>
+                  <p class="text-center text-gray-600 mt-4">No order data available in the e-shop.</p>
+              </div>
+              `
+          }
+          - Jika data entry user dalam model masih kosong maka class name dan contentnya akan diubah untuk menampilkan gambar belum ada pesanan. Sedangkan, jika sudah ada order entry maka,
+
+          classNameString = "columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6 w-full";
+          orderEntries.forEach((item) => {
+              const item_name = DOMPurify.sanitize(item.fields.item_name);
+              const description = DOMPurify.sanitize(item.fields.description);
+              htmlString += ` 
+                ...
+              `;
+          });
+            - DOMPurify.sanitize(...); akan menghapus isi input item_name dan description jika input merupakan 
+            html tag
+            - kemudian html String akan ditampilkan seperti html tag dalam order_card.html
+          
+        - Memperbarui Elemen HTML
+          document.getElementById("order_entry_cards").className = classNameString;
+          document.getElementById("order_entry_cards").innerHTML = htmlString;
+          className: Mengatur kelas CSS untuk elemen order_entry_cards sesuai dengan kondisi yang telah ditentukan.
+          innerHTML: Mengupdate konten HTML dari elemen order_entry_cards dengan htmlString, yang telah dibangun dari data entri order.
+
+        - Memanggil Fungsi
+        refreshOrderEntries();
+        refreshOrderEntries(): Memanggil fungsi ini saat halaman dimuat untuk memuat entri pesanan secara asinkronus dan memperbarui tampilan.
+
+2. Jelaskan manfaat dari penggunaan JavaScript dalam pengembangan aplikasi web!
+
+  1) Interaktivitas
+    JavaScript memungkinkan pengembang untuk menambahkan elemen interaktif pada halaman web, seperti animasi, efek transisi, dan respons langsung terhadap tindakan pengguna. Hal ini membuat pengalaman pengguna lebih menarik dan dinamis.
+
+  2) Manipulasi DOM
+    JavaScript dapat digunakan untuk mengakses dan memanipulasi Document Object Model (DOM). Ini memungkinkan pengembang untuk memperbarui konten, struktur, dan gaya elemen HTML secara real-time tanpa perlu memuat ulang halaman.
+
+  3) Validasi Formulir
+    Dengan JavaScript, pengembang dapat melakukan validasi data di sisi klien sebelum mengirimkan data ke server. Ini membantu mencegah kesalahan dan memastikan data yang dikirimkan memenuhi kriteria tertentu, sehingga meningkatkan efisiensi dan pengalaman pengguna.
+
+  4) Komunikasi Asinkron (AJAX)
+    JavaScript memungkinkan penggunaan AJAX (Asynchronous JavaScript and XML), yang memungkinkan halaman web untuk berkomunikasi dengan server secara asinkron. Ini memungkinkan pengambilan data baru tanpa memuat ulang seluruh halaman, meningkatkan kinerja aplikasi.
+
+  5) Pengembangan Aplikasi Single Page (SPA)
+    JavaScript memungkinkan pengembangan aplikasi web satu halaman (SPA), di mana seluruh aplikasi dimuat dalam satu halaman dan konten baru diambil dan ditampilkan secara dinamis. Ini meningkatkan kecepatan dan responsivitas aplikasi.
+
+  6) Keterhubungan dengan API
+    JavaScript dapat digunakan untuk terhubung dengan berbagai API (Application Programming Interfaces), memungkinkan aplikasi web untuk mengakses data dari sumber eksternal. Ini memberi kemampuan untuk mengintegrasikan layanan pihak ketiga, seperti pembayaran online, peta, dan media sosial.
+
+  7) Cross-Platform dan Kompatibilitas
+    JavaScript dapat dijalankan di berbagai platform dan perangkat, termasuk desktop, tablet, dan smartphone. Hal ini membuatnya ideal untuk pengembangan aplikasi web yang responsif dan dapat diakses oleh pengguna di berbagai perangkat.
+
+  8) Framework dan Library
+    Terdapat banyak framework dan library JavaScript, seperti React, Angular, dan Vue.js, yang membantu pengembang dalam membangun aplikasi dengan lebih cepat dan efisien. Framework ini menyediakan struktur dan komponen yang siap digunakan, sehingga mengurangi waktu pengembangan.
+
+  9) Kemampuan Pengembangan Backend
+    Dengan munculnya lingkungan seperti Node.js, JavaScript juga dapat digunakan untuk pengembangan backend. Ini memungkinkan pengembang untuk menggunakan satu bahasa pemrograman (JavaScript) untuk seluruh tumpukan pengembangan, baik di sisi klien maupun server.
+
+3. Jelaskan fungsi dari penggunaan await ketika kita menggunakan fetch()! Apa yang akan terjadi jika kita tidak menggunakan await?
+
+  1) Fungsi await dalam fetch()
+    - Menunggu Resolusi Promise: Ketika kita memanggil fetch(), fungsi ini mengembalikan sebuah Promise yang merepresentasikan hasil dari permintaan HTTP yang dilakukan. Dengan menggunakan await, kita memberitahu JavaScript untuk menunggu hingga Promise tersebut diselesaikan (resolved) sebelum melanjutkan eksekusi kode berikutnya.
+    - Mendapatkan Data dengan Lebih Mudah: Dengan await, kita bisa langsung mendapatkan hasil dari Promise tanpa harus menggunakan method .then(). Ini membuat kode lebih bersih dan lebih mudah dibaca.
+  2) Apa yang Terjadi Jika Tidak Menggunakan await?
+    - Eksekusi Berlanjut Tanpa Menunggu: Jika kita tidak menggunakan await, kode setelah pemanggilan fetch() akan langsung dieksekusi tanpa menunggu hasil dari permintaan tersebut. Ini bisa menyebabkan kode mencoba mengakses hasil dari fetch() yang belum tersedia, sehingga menghasilkan nilai undefined atau error.
+    - Kesulitan dalam Mengelola Kode Asinkron: Tanpa await, kita harus menggunakan .then() untuk menangani Promise, yang bisa membuat kode menjadi lebih sulit dibaca dan dikelola, terutama jika ada beberapa level pemanggilan fungsi asinkron.
+
+4. Mengapa kita perlu menggunakan decorator csrf_exempt pada view yang akan digunakan untuk AJAX POST?
+
+  1) 
+    Decorator @csrf_exempt digunakan untuk menghindari kegagalan request yang dilakukan. Ketika menggunakan AJAX untuk mengirimkan permintaan POST, token CSRF harus disertakan dalam header permintaan atau dalam body. Dengan menggunakan @csrf_exempt, maka view diijinkan untuk menerima permintaan POST tanpa memerlukan verifikasi CSRF. Ini bermanfaat dalam situasi untuk mengontrol akses dan tidak mempersulit pengguna yang berinteraksi dengan API atau fungsionalitas tertentu. Meskipun mengizinkan permintaan POST tanpa token CSRF dapat memudahkan integrasi dan penggunaan AJAX, ini juga membuat aplikasi lebih rentan terhadap serangan CSRF.
+
+5. Pada tutorial PBP minggu ini, pembersihan data input pengguna dilakukan di belakang (backend) juga. Mengapa hal tersebut tidak dilakukan di frontend saja?
+
+  1) Membersihkan data di frontend saja tidak cukup karena beberapa alasan penting yang berkaitan dengan keamanan dan integritas aplikasi:
+    - Manipulasi Pengguna:
+    Pengguna dapat dengan mudah memodifikasi atau menonaktifkan skrip JavaScript di browser mereka. Ini berarti bahwa validasi atau pembersihan yang dilakukan di frontend dapat diabaikan atau dimodifikasi oleh penyerang.
+    
+    - Data Berbahaya:
+    Penyerang dapat mengirimkan data berbahaya secara langsung ke server menggunakan alat seperti Postman atau curl, tanpa melalui frontend. Jika hanya bergantung pada pembersihan di frontend, server akan tetap menerima data yang tidak valid atau berbahaya.
+    
+    - Keamanan Server:
+    Server harus memiliki kontrol penuh atas data yang diterima. Tanpa pembersihan dan validasi di backend, server rentan terhadap berbagai jenis serangan, seperti SQL Injection, Cross-Site Scripting (XSS), dan Command Injection.
+    
+    - Integritas Data:
+    Validasi di backend membantu memastikan bahwa data yang masuk ke database atau diproses oleh aplikasi adalah valid dan konsisten. Data yang tidak valid dapat menyebabkan kerusakan pada aplikasi dan mengganggu pengalaman pengguna.

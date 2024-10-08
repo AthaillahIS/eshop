@@ -1,7 +1,8 @@
 {% extends 'base.html' %}
 {% load static %}
+
 {% block meta %}
-<title>Edit Mood</title>
+<title>Add Order Entry</title>
 {% endblock meta %}
 
 {% block content %}
@@ -10,16 +11,31 @@
     <div class="container mx-auto px-5 py-10 mt-16 max-w-lg">
         <h1 class="text-4xl font-extrabold text-center mb-6 text-gray-900">Add Order</h1>
   
-        <div class="bg-white rounded-lg shadow-lg p-8">
-            <form method="POST" class="space-y-5">
+        <div class="bg-white rounded-lg shadow-lg p-8 space-y-6">
+            <form method="POST">
                 {% csrf_token %}
                 {% for field in form %}
-                    <div class="flex flex-col">
+                    <div class="flex flex-col mb-4">
                         <label for="{{ field.id_for_label }}" class="text-sm font-medium text-gray-800 mb-2">
                             {{ field.label }}
                         </label>
                         <div class="relative">
-                            {{ field }} 
+                            {% if field.name == 'description' %}
+                                <textarea name="{{ field.name }}" 
+                                          id="{{ field.id_for_label }}" 
+                                          rows="5"
+                                          placeholder="Item Description"
+                                          class="mt-1 block w-full border border-gray-300 rounded-md p-2 hover:border-gray-700" 
+                                          {% if field.is_required %}required{% endif %}>{{ field.value|default:'' }}</textarea>
+                            {% else %}
+                                <input type="{{ field.field.widget.attrs.type }}" 
+                                       name="{{ field.name }}" 
+                                       id="{{ field.id_for_label }}" 
+                                       value="{{ field.value|default:'' }}"
+                                       {% if field.name == 'item_name' %}placeholder="Item Description"{% endif %}
+                                       class="mt-1 block w-full border border-gray-300 rounded-md p-2 hover:border-gray-700"
+                                       {% if field.is_required %}required{% endif %}>
+                            {% endif %}
                         </div>
                         {% if field.help_text %}
                             <p class="mt-1 text-xs text-gray-500">{{ field.help_text }}</p>

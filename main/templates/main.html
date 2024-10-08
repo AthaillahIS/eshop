@@ -3,6 +3,7 @@
 
 {% block meta %}
 <title>e-Shop</title>
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.7/dist/purify.min.js"></script>
 {% endblock meta %}
 
 {% block content %}
@@ -21,27 +22,159 @@
     </div>
 
     <div class="flex justify-between mb-6">
-        <div class="flex">
-            <h5 class="bg-gray-900 text-white font-bold py-2 px-4 rounded-lg">Last Login: {{ last_login }}</h5>
-        </div>
-        <div>
-            <a href="{% url 'main:add_order_entry' %}" class="bg-gray-900 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-lg">
-                Add New Order Entry
-            </a>
-        </div>
+        <h5 class="bg-gray-900 text-white font-bold py-2 px-4 rounded-lg">Last Login: {{ last_login }}</h5>
+    </div>
+    <div class="flex justify-end mb-6">
+        <a href="{% url 'main:add_order_entry' %}" class="bg-gray-900 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-lg mx-2">
+            Add New Order Entry
+        </a>
+        <button data-modal-target="crudModal" data-modal-toggle="crudModal" class="btn bg-gray-900 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-lg" onclick="showModal();">
+            Add New Order Entry by AJAX
+        </button>
     </div>
 
-    {% if not order_entries %}
-    <div class="flex flex-col items-center justify-center min-h-[24rem] p-6">
-        <img src="{% static 'image/sad-icon.png' %}" alt="Sad face" class="w-32 h-32 mb-4"/>
-        <p class="text-center text-gray-600 mt-4">No order data available in the e-shop.</p>
-    </div>
-    {% else %}
-    <div class="columns-1 sm:columns-2 lg:columns-3 w-full">
-        {% for order_entry in order_entries %}
-            {% include 'order_card.html' with order_entry=order_entry %}
-        {% endfor %}
-    </div>
-    {% endif %}
+    <div id="order_entry_cards"></div>
+    <div id="crudModal" tabindex="-1" aria-hidden="true" class="hidden fixed inset-0 z-50 w-full flex items-center justify-center bg-gray-800 bg-opacity-50">
+        <div id="crudModalContent" class="relative bg-white shadow-md rounded-lg w-5/6 sm:w-3/4 md:w-1/2 lg:w-1/3 mx-4 sm:mx-0 p-6">
+            <!-- Modal header -->
+            <div class="flex items-center justify-between border-b pb-4 mb-4">
+                <h3 class="text-xl font-semibold text-gray-900">
+                    Add New Order Entry
+                </h3>
+                <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5" id="closeModalBtn">
+                    <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                    </svg>
+                    <span class="sr-only">Close modal</span>
+                </button>
+            </div>
+            <!-- Modal body -->
+            <div class="space-y-6">
+                <form id="orderEntryForm">
+                    <div class="mb-4">
+                        <label for="item_name" class="block text-sm font-medium text-gray-700">Item Name</label>
+                        <input type="text" id="item_name" name="item_name" class="mt-1 block w-full border border-gray-300 rounded-md p-2 hover:border-gray-700" placeholder="Enter Item Name" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="price" class="block text-sm font-medium text-gray-700">Price</label>
+                        <input type="number" id="price" name="price" class="mt-1 block w-full border border-gray-300 rounded-md p-2 hover:border-gray-700" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
+                        <textarea id="description" name="description" rows="3" class="mt-1 block w-full h-52 resize-none border border-gray-300 rounded-md p-2 hover:border-gray-700" placeholder="Item Description" required></textarea>
+                    </div>
+                    <div class="mb-4">
+                        <label for="rating" class="block text-sm font-medium text-gray-700">Rating (1-10)</label>
+                        <input type="number" id="rating" name="rating" min="1" max="10" class="mt-1 block w-full border border-gray-300 rounded-md p-2 hover:border-gray-700" required>
+                    </div>
+                </form>
+            </div>
+            <!-- Modal footer -->
+            <div class="flex justify-end border-t pt-4 mt-4">
+                <button type="button" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-lg" id="cancelButton">Cancel</button>
+                <button type="submit" id="submitOrderEntry" form="orderEntryForm" class="bg-gray-900 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-lg ml-2">Save</button>
+            </div>
+        </div>
+    </div>    
 </div>
+
+<script>
+    async function getOrderEntries() {
+        return fetch("{% url 'main:show_json' %}").then((res) => res.json())
+    }
+    async function refreshOrderEntries() {
+        document.getElementById("order_entry_cards").innerHTML = "";
+        document.getElementById("order_entry_cards").className = "";
+        const orderEntries = await getOrderEntries();
+        let htmlString = "";
+        let classNameString = "";
+        if (orderEntries.length === 0) {
+        classNameString = "flex flex-col items-center justify-center min-h-[24rem] p-6";
+        htmlString = `
+            <div class="flex flex-col items-center justify-center min-h-[24rem] p-6">
+                <img src="{% static 'image/sad-icon.png' %}" alt="Sad face" class="w-32 h-32 mb-4"/>
+                <p class="text-center text-gray-600 mt-4">No order data available in the e-shop.</p>
+            </div>
+        `;
+    }
+    else {
+        classNameString = "columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6 w-full"
+        orderEntries.forEach((item) => {
+            const item_name = DOMPurify.sanitize(item.fields.item_name);
+            const description = DOMPurify.sanitize(item.fields.description);
+            htmlString += `
+            <div class="relative break-inside-avoid flex flex-col items-center min-h-0 bg-gray-100">
+                <div class="container mx-auto px-4 py-4 max-w-3xl"> <!-- Increased max-width -->
+                    <div class="relative bg-white shadow-md rounded-lg mb-6 border border-gray-300 w-full">
+                        <div class="p-4">
+                            <h3 class="font-bold text-lg text-gray-800">${item_name}</h3>
+                            <p class="text-gray-600">Date: ${item.fields.date}</p>
+                            <p class="text-gray-800 font-semibold">Price: ${item.fields.price}</p>
+                            <p class="text-gray-700">Description: ${description}</p>
+                            <p class="text-gray-700 font-semibold">Rating: ${item.fields.rating > 10 ? '10+' : item.fields.rating}</p>
+                        </div>
+                        <div class="flex justify-end p-2">
+                            <a href="/edit-order/${item.pk}" class="bg-yellow-500 hover:bg-yellow-600 text-white rounded-full p-2 transition duration-300 shadow-md mr-2">
+                                Edit
+                            </a>
+                            <a href="/delete/${item.pk}" class="bg-red-500 hover:bg-red-600 text-white rounded-full p-2 transition duration-300 shadow-md">
+                                Delete
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            `;
+        });
+    }
+    document.getElementById("order_entry_cards").className = classNameString;
+    document.getElementById("order_entry_cards").innerHTML = htmlString;
+    }
+    refreshOrderEntries();
+
+
+    const modal = document.getElementById('crudModal');
+    const modalContent = document.getElementById('crudModalContent');
+
+    function showModal() {
+        const modal = document.getElementById('crudModal');
+        const modalContent = document.getElementById('crudModalContent');
+
+        modal.classList.remove('hidden'); 
+        setTimeout(() => {
+            modalContent.classList.remove('opacity-0', 'scale-95');
+            modalContent.classList.add('opacity-100', 'scale-100');
+        }, 50); 
+    }
+
+    function hideModal() {
+        const modal = document.getElementById('crudModal');
+        const modalContent = document.getElementById('crudModalContent');
+
+        modalContent.classList.remove('opacity-100', 'scale-100');
+        modalContent.classList.add('opacity-0', 'scale-95');
+
+        setTimeout(() => {
+            modal.classList.add('hidden');
+        }, 150); 
+    }
+
+    document.getElementById("cancelButton").addEventListener("click", hideModal);
+    document.getElementById("closeModalBtn").addEventListener("click", hideModal);
+    function addOrderEntry() {
+        fetch("{% url 'main:add_order_entry_ajax' %}", {
+        method: "POST",
+        body: new FormData(document.querySelector('#orderEntryForm')),
+        })
+        .then(response => refreshOrderEntries())
+
+        document.getElementById("orderEntryForm").reset(); 
+        document.querySelector("[data-modal-toggle='crudModal']").click();
+
+        return false;
+    }
+    document.getElementById("submitOrderEntry").onclick = addOrderEntry
+</script>
 {% endblock %}
+
+

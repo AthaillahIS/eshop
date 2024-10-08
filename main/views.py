@@ -9,13 +9,16 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 import datetime
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
+from django.utils.html import strip_tags
 
 def show_xml(request):
-    data = Entry.objects.all()
+    data = Entry.objects.filter(user=request.user)
     return HttpResponse(serializers.serialize('xml', data), content_type='aplication/xml')
 
 def show_json(request):
-    data = Entry.objects.all()
+    data = Entry.objects.filter(user=request.user)
     return HttpResponse(serializers.serialize('json', data), content_type='aplication/json')
 
 def show_xml_by_id(request, id):
@@ -30,13 +33,11 @@ def show_json_by_id(request, id):
 # Create your views here.
 @login_required(login_url='/login')
 def show_main(request):
-    order_entries = Entry.objects.filter(user=request.user)
     context = {
         'name' : request.user.username,
         'class' : 'PBP E',
         'npm' : '2306275683',
         'app_name' : 'eshop',
-        'order_entries' : order_entries,
         'last_login': request.COOKIES['last_login'],
     }
 
@@ -92,6 +93,8 @@ def login_user(request):
             response = HttpResponseRedirect(reverse("main:show_main"))
             response.set_cookie('last_login', str(datetime.datetime.now()))
             return response
+        else:
+            messages.error(request, "Invalid username or password. Please try again.")
 
     else:
         form = AuthenticationForm(request)
@@ -103,3 +106,20 @@ def logout_user(request):
     response = HttpResponseRedirect(reverse('main:login'))
     response.delete_cookie('last_login')
     return response
+
+@csrf_exempt
+@require_POST
+def add_order_entry_ajax(request):
+    item_name = strip_tags(request.POST.get("item_name"))  # strip HTML tags!
+    description = strip_tags(request.POST.get("description"))  # strip HTML tags!
+    price = request.POST.get("price")
+    rating = request.POST.get("rating")
+    user = request.user
+
+    new_order = Entry(
+        item_name=item_name, price=price,
+        description=description, rating=rating,
+        user=user
+    )
+    new_order.save()
+    return HttpResponse(b"CREATED", status=201)
